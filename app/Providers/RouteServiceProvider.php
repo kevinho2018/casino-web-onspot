@@ -38,8 +38,8 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapApiRoutes();
 
         $this->mapWebRoutes();
-        // {{host}}/api/casino
-        $this->mapCasinoApiRoutes();
+
+        $this->mapCasinoApiRoutes(); // {{host}}/api/casino
     }
 
     /**
@@ -71,9 +71,17 @@ class RouteServiceProvider extends ServiceProvider
              ->group(base_path('routes/api.php'));
     }
 
+    /**
+     * Define the "casino-api" routes for the application.
+     *
+     * These routes are typically stateless.
+     *
+     * @return void
+     */
     protected function mapCasinoApiRoutes()
     {
-        Route::prefix('api/casino')
+        Route::prefix('casino-api')
+            ->middleware('api')
             ->namespace($this->namespace)
             ->group(base_path('routes/casino-api.php'));
     }
