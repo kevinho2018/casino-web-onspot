@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models\BaccaratHistory;
 
 use Illuminate\Database\Eloquent\Model;
 

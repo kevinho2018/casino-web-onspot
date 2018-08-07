@@ -10,93 +10,31 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use App\Services\Api\BaccaratService;
 
+/**
+ * Class BaccaratController
+ * @property BaccaratService baccaratService
+ * @package App\Http\Controllers\Api
+ */
 class BaccaratController extends Controller
 {
     /**
+     * BaccaratController constructor.
+     * @param BaccaratService $baccaratService
+     */
+    public function __construct(
+        BaccaratService $baccaratService
+    ) {
+        $this->baccaratService = $baccaratService;
+    }
+
+    /**
      * @param Request $request
-     * @return string
+     * @return \App\Http\Resources\BaccaratHistoryCollection
      */
     public function getBaccaratHistoryReport(Request $request)
     {
-        return response()->json(['data' => "user",
-        'status' => Response::HTTP_OK]);
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return $this->baccaratService->getBaccaratHistoryReport($request);
     }
 }
