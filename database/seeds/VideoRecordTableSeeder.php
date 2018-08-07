@@ -14,7 +14,6 @@ class VideoRecordTableSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
-        $carbon = new Carbon();
 
         //DB::table('VideoRecord')->delete();
 

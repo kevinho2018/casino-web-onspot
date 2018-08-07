@@ -24,7 +24,7 @@ class CreateBaccaratHistoryTable extends Migration
             $table->enum('WinSpot', ['Banker', 'Player', 'Tie'])
                 ->comment('牌局結果:莊家(Banker), 閒家(Player), 和(Tie)');
             $table->string('Card1', 4)
-                ->comment('閒1');
+                ->comment('閒1, S：黑桃、D：方塊、C：梅花、H：紅心');
             $table->string('Card2', 4)
                 ->comment('莊1');
             $table->string('Card3', 4)
