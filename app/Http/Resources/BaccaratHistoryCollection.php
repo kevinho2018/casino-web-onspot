@@ -18,7 +18,7 @@ class BaccaratHistoryCollection extends ResourceCollection
 
         return [
             "status" => "Success",
-            "modifiedStatus" => "Normal",
+            "modifiedStatus" => $request->get('modifiedStatus'),
             "data" => $this->collection,
         ];
     }

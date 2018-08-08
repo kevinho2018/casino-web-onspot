@@ -40,6 +40,4 @@ class BaccaratRepository
             ->where('ModifiedStatus', '=', $status)
             ->get();
     }
-
-
 }

@@ -39,7 +39,7 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapWebRoutes();
 
-        $this->mapCasinoApiRoutes(); // {{host}}/api/casino
+        $this->mapCasinoApiRoutes();
     }
 
     /**
