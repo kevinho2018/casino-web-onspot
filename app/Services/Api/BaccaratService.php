@@ -11,7 +11,6 @@ namespace App\Services\Api;
 use App\Http\Resources\BaccaratHistoryResource as BaccaratHistoryResource;
 use App\Http\Resources\BaccaratHistoryCollection as BaccaratHistoryCollection;
 use App\Repositories\BaccaratRepository;
-use function MongoDB\BSON\toJSON;
 
 /**
  * @property BaccaratRepository baccaratRepository
@@ -34,19 +33,11 @@ class BaccaratService
      */
     public function getBaccaratHistoryReport($input)
     {
-        try {
-            $searchStartTime = $input['startAt'];
-            $searchEndTime = $input['endAt'];
-            $status = $input['modifiedStatus'];
+        $searchStartTime = $input['startAt'];
+        $searchEndTime = $input['endAt'];
+        $status = $input['modifiedStatus'];
 
-            return new BaccaratHistoryCollection(BaccaratHistoryResource::collection($this->baccaratRepository->getBaccaratHistoryReport($searchStartTime,
-                $searchEndTime, $status)));
-        } catch (\Exception $e) {
-            $status = "error";
-            $code = 1;
-            $message = "{method is not allowed}";
-
-            return json_encode(['status' => $status, 'code' => $code, 'message' => $message]);
-        }
+        return new BaccaratHistoryCollection(BaccaratHistoryResource::collection($this->baccaratRepository->getBaccaratHistoryReport($searchStartTime,
+            $searchEndTime, $status)));
     }
 }

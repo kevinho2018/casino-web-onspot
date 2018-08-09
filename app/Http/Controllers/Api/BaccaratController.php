@@ -8,17 +8,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\Api\BaccaratService;
-use App\Constants\CasinoHttpMethodConstants;
 
 /**
  * Class BaccaratController
  * @property BaccaratService baccaratService
  * @package App\Http\Controllers\Api
  */
-class BaccaratController extends Controller
+class BaccaratController extends ApiController
 {
     /**
      * BaccaratController constructor.
@@ -36,14 +34,13 @@ class BaccaratController extends Controller
      */
     public function getBaccaratHistoryReport(Request $request)
     {
-        $uri = $request->fullUrl();
-        $method = $request->method();
         $input = $request->all();
 
         if (!$request->isMethod('GET')) {
+            //throw $this->methodNotAllowedHttpException;
             return json_encode(['Code' => 1, 'Message' => 'Method not allow.']);
         }
-        
+
         return $this->baccaratService->getBaccaratHistoryReport($input);
     }
 }

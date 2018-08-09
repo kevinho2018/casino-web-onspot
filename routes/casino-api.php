@@ -32,9 +32,9 @@ Route::group(
         // 百家樂 API -> uri-prefix = 'baccarat'
         // TODO 測試完成後 -> 補上白名單限制 ['fw-only-whitelisted']
         Route::group(['prefix' => 'baccarat'], function () {
-            // 查詢牌局紀錄
+            // 查詢牌局紀錄x
             Route::get('game/historySearch', 'BaccaratController@getBaccaratHistoryReport')
-                //->middleware(['casino-api.verify:startAt,endAt,modifiedStatus'])
+                ->middleware(['casino-api.verify:startAt,endAt,modifiedStatus'])
                 ->name('history');
 
             // 查詢影片紀錄
