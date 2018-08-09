@@ -23,8 +23,6 @@ class CreateVideoRecordTable extends Migration
                 ->comment('局號');
             $table->dateTime('StartTime')
                 ->comment('牌局開始時間');
-            $table->string('FilePath', 255)
-                ->comment('影片S3存檔路徑');
 
             $table->charset = 'utf8';
             $table->collation = 'utf8_unicode_ci';

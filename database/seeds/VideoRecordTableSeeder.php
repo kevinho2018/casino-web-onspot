@@ -22,8 +22,7 @@ class VideoRecordTableSeeder extends Seeder
                 'TableId' => $faker->randomElement(['E', 'F', 'G', 'H']),
                 'Round' => rand(1000000, 9999999),
                 'Run' => rand(1, 100),
-                'StartTime' => $faker->dateTime('now'), // 牌局開始時間
-                'FilePath' => 'PATH_OF_S3'
+                'StartTime' => $faker->dateTime('now') // 牌局開始時間
             ]);
         }
     }
