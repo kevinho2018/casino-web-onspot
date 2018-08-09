@@ -36,21 +36,14 @@ class BaccaratController extends Controller
      */
     public function getBaccaratHistoryReport(Request $request)
     {
-
-        $validateData = $request->validate([
-            'startAt' => 'required',
-            'endAt' => 'required',
-            'modifiedStatus' => 'required'
-        ]);
-
         $uri = $request->fullUrl();
         $method = $request->method();
         $input = $request->all();
 
-        if (!$request->isMethod(CasinoHttpMethodConstants::HTTP_METHOD_GET)) {
+        if (!$request->isMethod('GET')) {
             return json_encode(['Code' => 1, 'Message' => 'Method not allow.']);
         }
-
+        
         return $this->baccaratService->getBaccaratHistoryReport($input);
     }
 }

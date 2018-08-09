@@ -40,7 +40,7 @@ Route::group(
             // 查詢影片紀錄
             Route::get('video/videoSearch', 'VideoController@getVideoFilePath')
                 // TODO api寫好後 再來加入request parameters的驗證
-                ->middleware(['casino-api.verify:account,nickname'])
+                //->middleware(['casino-api.verify:account,nickname'])
                 ->name('videos');
         });
     }
