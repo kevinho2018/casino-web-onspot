@@ -12,8 +12,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $Round 輪號
  * @property int $Run 局號
  * @property string $StartTime 牌局開始時間
- * @property string $FilePath 影片S3存檔路徑
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video\VideoRecord whereFilePath($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video\VideoRecord whereRecordId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video\VideoRecord whereRound($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video\VideoRecord whereRun($value)
@@ -46,7 +44,6 @@ class VideoRecord extends Model
     protected $fillable = [
         'RecordId',
         'TableId',
-        'TrnId',
         'Round',
         'Run',
         'StartTime'
