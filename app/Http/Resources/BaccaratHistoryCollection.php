@@ -4,6 +4,10 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
+/**
+ * Class BaccaratHistoryCollection
+ * @package App\Http\Resources
+ */
 class BaccaratHistoryCollection extends ResourceCollection
 {
     /**
