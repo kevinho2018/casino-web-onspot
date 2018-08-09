@@ -9,6 +9,8 @@
 namespace App\Services\Api;
 
 use App\Repositories\VideoRepository;
+use App\Http\Resources\VideoRecordResource as VideoRecordResource;
+use App\Http\Resources\VideoRecordCollection as VideoRecordCollection;
 
 /**
  * @property VideoRepository videoRepository
@@ -27,7 +29,7 @@ class VideoService
 
     /**
      * @param $input
-     * @return string
+     * @return VideoRecordCollection|\Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection|static[]
      */
     public function getVideoReport($input)
     {
@@ -35,6 +37,6 @@ class VideoService
         $round = $input['round'];
         $run = $input['run'];
 
-        return $this->videoRepository->getVideoReport($tableId, $round, $run);
+        return new VideoRecordCollection(VideoRecordResource::collection($this->videoRepository->getVideoReport($tableId, $round, $run)));
     }
 }
