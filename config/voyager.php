@@ -147,6 +147,7 @@ return [
     'dashboard' => [
         // Add custom list items to navbar's dropdown
         'navbar_items' => [
+            /*
             'Profile' => [
                 'route'      => 'voyager.profile',
                 'classes'    => 'class-full-of-rum',
@@ -157,6 +158,7 @@ return [
                 'icon_class'   => 'voyager-home',
                 'target_blank' => true,
             ],
+            */
             'Logout' => [
                 'route'      => 'voyager.logout',
                 'icon_class' => 'voyager-power',
