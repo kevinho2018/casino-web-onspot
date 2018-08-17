@@ -1,43 +1,9 @@
 <?php
-/**
- * A helper file for your Eloquent Models
- * Copy the phpDocs from this file to the correct Model,
- * And remove them from this file, to prevent double declarations.
- *
- * @author Barry vd. Heuvel <barryvdh@gmail.com>
- */
 
+namespace App\Models\BaccaratHistory;
 
-namespace App{
-/**
- * App\User
- *
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
- */
-	class User extends \Eloquent {}
-}
+use Illuminate\Database\Eloquent\Model;
 
-namespace App\Models\Video{
-/**
- * App\Models\Video\VideoRecord
- *
- * @property int $RecordId
- * @property string $TableId 桌號
- * @property int $Round 輪號
- * @property int $Run 局號
- * @property string $StartTime 牌局開始時間
- * @property string $FilePath 影片S3存檔路徑
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video\VideoRecord whereFilePath($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video\VideoRecord whereRecordId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video\VideoRecord whereRound($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video\VideoRecord whereRun($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video\VideoRecord whereStartTime($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Video\VideoRecord whereTableId($value)
- */
-	class VideoRecord extends \Eloquent {}
-}
-
-namespace App\Models\BaccaratHistory{
 /**
  * App\Models\BaccaratHistory\BaccaratHistory
  *
@@ -69,7 +35,46 @@ namespace App\Models\BaccaratHistory{
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\BaccaratHistory\BaccaratHistory whereRun($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\BaccaratHistory\BaccaratHistory whereTableId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\BaccaratHistory\BaccaratHistory whereWinSpot($value)
+ * @mixin \Eloquent
  */
-	class BaccaratHistory extends \Eloquent {}
-}
+class BaccaratHistory extends Model
+{
+    /**
+     * The database table used by the model.
+     *
+     * @var string
+     */
+    protected $table = 'BaccaratHistory';
 
+    /**
+     * No use created_at, updated_at
+     *
+     * @var
+     */
+    public $timestamps = false;
+
+    /**
+     * primary key
+     * @var string
+     */
+    protected $primaryKey = 'HistoryId';
+
+    /**
+     * @var array
+     */
+    protected $fillable = [
+        'TableId',
+        'Round',
+        'Run',
+        'WinSpot',
+        'Card1',
+        'Card2',
+        'Card3',
+        'Card4',
+        'Card5',
+        'Card6',
+        'ModifiedStatus',
+        'ModifiedTime',
+        'CreateTime'
+    ];
+}

@@ -11,12 +11,6 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('/welcome', function () {
     return view('welcome');
-});
-
-
-Route::group(['namespace' => 'Api'], function() {
-   Route::get('casino/baccarat/game/history', 'BaccaratController@getHistory')->name('game-history');
-   Route::get('casino/baccarat/video', 'VideoController@getVideo')->name('get-video');
 });

@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.6.29 on 2018-08-03 07:30:08.
+ * Generated for Laravel 5.6.31 on 2018-08-09 03:25:00.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -4915,6 +4915,18 @@ namespace Illuminate\Support\Facades {
         }
         
         /**
+         * Remove all of the directories within a given directory.
+         *
+         * @param string $directory
+         * @return bool 
+         * @static 
+         */ 
+        public static function deleteDirectories($directory)
+        {
+            return \Illuminate\Filesystem\Filesystem::deleteDirectories($directory);
+        }
+        
+        /**
          * Empty the specified directory of all files and folders.
          *
          * @param string $directory
@@ -9242,6 +9254,20 @@ namespace Illuminate\Support\Facades {
         }
         
         /**
+         * Add a route to the underlying route collection.
+         *
+         * @param array|string $methods
+         * @param string $uri
+         * @param \Closure|array|string|null $action
+         * @return \Illuminate\Routing\Route 
+         * @static 
+         */ 
+        public static function addRoute($methods, $uri, $action)
+        {
+            return \Illuminate\Routing\Router::addRoute($methods, $uri, $action);
+        }
+        
+        /**
          * Return the response returned by the given route.
          *
          * @param string $name
@@ -12485,6 +12511,295 @@ namespace Illuminate\Support\Facades {
  
 }
 
+namespace PragmaRX\Firewall\Vendor\Laravel { 
+
+    class Facade {
+        
+        /**
+         * Get all IP addresses.
+         *
+         * @return \Illuminate\Support\Collection 
+         * @static 
+         */ 
+        public static function all()
+        {
+            return \PragmaRX\Firewall\Firewall::all();
+        }
+        
+        /**
+         * Get all IP addresses by country.
+         *
+         * @param $country
+         * @return \Illuminate\Support\Collection 
+         * @static 
+         */ 
+        public static function allByCountry($country)
+        {
+            return \PragmaRX\Firewall\Firewall::allByCountry($country);
+        }
+        
+        /**
+         * Blacklist an IP adress.
+         *
+         * @param $ip
+         * @param bool $force
+         * @return bool 
+         * @static 
+         */ 
+        public static function blacklist($ip, $force = false)
+        {
+            return \PragmaRX\Firewall\Firewall::blacklist($ip, $force);
+        }
+        
+        /**
+         * Create a blocked access response.
+         *
+         * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse|null 
+         * @static 
+         */ 
+        public static function blockAccess()
+        {
+            return \PragmaRX\Firewall\Firewall::blockAccess();
+        }
+        
+        /**
+         * Clear firewall table.
+         *
+         * @return mixed 
+         * @static 
+         */ 
+        public static function clear()
+        {
+            return \PragmaRX\Firewall\Firewall::clear();
+        }
+        
+        /**
+         * Find an IP address.
+         *
+         * @param string $ip
+         * @return mixed 
+         * @static 
+         */ 
+        public static function find($ip)
+        {
+            return \PragmaRX\Firewall\Firewall::find($ip);
+        }
+        
+        /**
+         * Get the IP address.
+         *
+         * @param null $ip
+         * @return null|string 
+         * @static 
+         */ 
+        public static function getIp($ip = null)
+        {
+            return \PragmaRX\Firewall\Firewall::getIp($ip);
+        }
+        
+        /**
+         * Get the messages.
+         *
+         * @return \Illuminate\Support\Collection 
+         * @static 
+         */ 
+        public static function getMessages()
+        {
+            return \PragmaRX\Firewall\Firewall::getMessages();
+        }
+        
+        /**
+         * Check if IP address is valid.
+         *
+         * @param $ip
+         * @return bool 
+         * @static 
+         */ 
+        public static function ipIsValid($ip)
+        {
+            return \PragmaRX\Firewall\Firewall::ipIsValid($ip);
+        }
+        
+        /**
+         * Check if IP is blacklisted.
+         *
+         * @param null|string $ip
+         * @return bool 
+         * @static 
+         */ 
+        public static function isBlacklisted($ip = null)
+        {
+            return \PragmaRX\Firewall\Firewall::isBlacklisted($ip);
+        }
+        
+        /**
+         * Check if IP address is whitelisted.
+         *
+         * @param null|string $ip
+         * @return bool 
+         * @static 
+         */ 
+        public static function isWhitelisted($ip = null)
+        {
+            return \PragmaRX\Firewall\Firewall::isWhitelisted($ip);
+        }
+        
+        /**
+         * Register messages in log.
+         *
+         * @param $message
+         * @return void 
+         * @static 
+         */ 
+        public static function log($message)
+        {
+            \PragmaRX\Firewall\Firewall::log($message);
+        }
+        
+        /**
+         * Remove IP from all lists.
+         *
+         * @param $ip
+         * @return bool 
+         * @static 
+         */ 
+        public static function remove($ip)
+        {
+            return \PragmaRX\Firewall\Firewall::remove($ip);
+        }
+        
+        /**
+         * Get the list of all IP addresses stored.
+         *
+         * @return mixed 
+         * @static 
+         */ 
+        public static function report()
+        {
+            return \PragmaRX\Firewall\Firewall::report();
+        }
+        
+        /**
+         * Set the current IP address.
+         *
+         * @param $ip
+         * @static 
+         */ 
+        public static function setIp($ip)
+        {
+            return \PragmaRX\Firewall\Firewall::setIp($ip);
+        }
+        
+        /**
+         * Check if a string is a valid country info.
+         *
+         * @param $country
+         * @return bool 
+         * @static 
+         */ 
+        public static function validCountry($country)
+        {
+            return \PragmaRX\Firewall\Firewall::validCountry($country);
+        }
+        
+        /**
+         * Tell in which list (black/white) an IP address is.
+         *
+         * @param $ip
+         * @return bool|string 
+         * @static 
+         */ 
+        public static function whichList($ip)
+        {
+            return \PragmaRX\Firewall\Firewall::whichList($ip);
+        }
+        
+        /**
+         * Whitelist an IP address.
+         *
+         * @param $ip
+         * @param bool $force
+         * @return bool 
+         * @static 
+         */ 
+        public static function whitelist($ip, $force = false)
+        {
+            return \PragmaRX\Firewall\Firewall::whitelist($ip, $force);
+        }
+        
+        /**
+         * Update the GeoIp2 database.
+         *
+         * @return bool 
+         * @static 
+         */ 
+        public static function updateGeoIp()
+        {
+            return \PragmaRX\Firewall\Firewall::updateGeoIp();
+        }
+        
+        /**
+         * Check if the application is receiving some sort of attack.
+         *
+         * @param null $ipAddress
+         * @return bool 
+         * @static 
+         */ 
+        public static function isBeingAttacked($ipAddress = null)
+        {
+            return \PragmaRX\Firewall\Firewall::isBeingAttacked($ipAddress);
+        }
+        
+        /**
+         * Get a response to the attack.
+         *
+         * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse|null 
+         * @static 
+         */ 
+        public static function responseToAttack()
+        {
+            return \PragmaRX\Firewall\Firewall::responseToAttack();
+        }
+        
+        /**
+         * Get country code from an IP address.
+         *
+         * @param $ip
+         * @return bool|string 
+         * @static 
+         */ 
+        public static function getCountryFromIp($ip)
+        {
+            return \PragmaRX\Firewall\Firewall::getCountryFromIp($ip);
+        }
+        
+        /**
+         * Make a country info from a string.
+         *
+         * @param $country
+         * @return bool|string 
+         * @static 
+         */ 
+        public static function makeCountryFromString($country)
+        {
+            return \PragmaRX\Firewall\Firewall::makeCountryFromString($country);
+        }
+        
+        /**
+         * Get the GeoIP instance.
+         *
+         * @return object 
+         * @static 
+         */ 
+        public static function getGeoIp()
+        {
+            return \PragmaRX\Firewall\Firewall::getGeoIp();
+        }
+         
+    }
+ 
+}
+
 
 namespace  { 
 
@@ -12680,7 +12995,7 @@ namespace  {
              *
              * @param mixed $id
              * @param array $columns
-             * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection 
+             * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static|static[] 
              * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
              * @static 
              */ 
@@ -12831,7 +13146,7 @@ namespace  {
              *
              * @param int $count
              * @param callable $callback
-             * @param string $column
+             * @param string|null $column
              * @param string|null $alias
              * @return bool 
              * @static 
@@ -13104,7 +13419,7 @@ namespace  {
              * @param mixed $value
              * @param callable $callback
              * @param callable $default
-             * @return mixed 
+             * @return mixed|$this 
              * @static 
              */ 
             public static function when($value, $callback, $default = null)
@@ -13130,7 +13445,7 @@ namespace  {
              * @param mixed $value
              * @param callable $callback
              * @param callable $default
-             * @return mixed 
+             * @return mixed|$this 
              * @static 
              */ 
             public static function unless($value, $callback, $default = null)
@@ -14828,6 +15143,8 @@ namespace  {
     class Validator extends \Illuminate\Support\Facades\Validator {}
 
     class View extends \Illuminate\Support\Facades\View {}
+
+    class Firewall extends \PragmaRX\Firewall\Vendor\Laravel\Facade {}
  
 }
 
