@@ -17,4 +17,9 @@ Route::get('/welcome', function () {
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
+
+    // Override Route
+    Route::put('put-game-result', 'CasinoAdmin\GameResultModifyController@putCancel')
+        ->name('put-game-result')
+        ->middleware('admin.user');
 });

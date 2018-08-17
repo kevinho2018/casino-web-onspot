@@ -7,10 +7,31 @@ use Illuminate\Support\Facades\DB;
 use TCG\Voyager\Database\Schema\SchemaManager;
 use TCG\Voyager\Facades\Voyager;
 use TCG\Voyager\Http\Controllers\VoyagerBaseController;
+use App\Services\CasinoAdmin\GameResultService;
 
+
+/**
+ * @property GameResultService gameResultService
+ */
 class GameResultModifyController extends VoyagerBaseController
 {
-    public function index(Request $request)
+    /**
+     * GameResultModifyController constructor.
+     * @param GameResultService $gameResultService
+     */
+    public function __construct(
+        GameResultService $gameResultService
+    ) {
+        $this->gameResultService = $gameResultService;
+    }
+
+    /**
+     * @param Request $request
+     * @param null $responseString
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function index(Request $request, $responseString=null)
     {
         // GET THE SLUG, ex. 'posts', 'pages', etc.
         $slug = $this->getSlug($request);
@@ -78,6 +99,8 @@ class GameResultModifyController extends VoyagerBaseController
             $view = "voyager::$slug.browse";
         }
 
+
+
         return Voyager::view($view, compact(
             'dataType',
             'dataTypeContent',
@@ -86,7 +109,8 @@ class GameResultModifyController extends VoyagerBaseController
             'orderBy',
             'sortOrder',
             'searchable',
-            'isServerSide'
+            'isServerSide',
+            'responseString'
         ));
     }
 
@@ -123,5 +147,18 @@ class GameResultModifyController extends VoyagerBaseController
         }
 
         return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function putCancel(Request $request)
+    {
+        Voyager::canOrFail('browse_BaccaratHistory');
+
+        $responseString = $this->gameResultService->putCancel($request);
+
+        return view('vendor.voyager.baccarathistory.browse', compact('responseString'));
     }
 }

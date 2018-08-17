@@ -1,290 +1,579 @@
 @extends('voyager::master')
 
-@section('page_title', __('voyager::generic.viewing').' '.$dataType->display_name_plural)
-
 @section('page_header')
     <div class="container-fluid">
         <h1 class="page-title">
-            <i class="{{ $dataType->icon }}"></i> {{ $dataType->display_name_plural }}
+            <i class="voyager-list"></i> 遊戲牌局改單取消
+            {{ $responseString }}
         </h1>
-        @can('add',app($dataType->model_name))
-            <a href="{{ route('voyager.'.$dataType->slug.'.create') }}" class="btn btn-success btn-add-new">
-                <i class="voyager-plus"></i> <span>{{ __('voyager::generic.add_new') }}</span>
-            </a>
-        @endcan
-        @can('delete',app($dataType->model_name))
-            @include('voyager::partials.bulk-delete')
-        @endcan
-        @can('edit',app($dataType->model_name))
-            @if(isset($dataType->order_column) && isset($dataType->order_display_column))
-                <a href="{{ route('voyager.'.$dataType->slug.'.order') }}" class="btn btn-primary">
-                    <i class="voyager-list"></i> <span>{{ __('voyager::bread.order') }}</span>
-                </a>
-            @endif
-        @endcan
-        @include('voyager::multilingual.language-selector')
     </div>
+@stop
+
+@section('custom-css')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+@stop
+
+@section('page-js-files')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+
 @stop
 
 @section('content')
-    <div class="page-content browse container-fluid">
-        @include('voyager::alerts')
+    <div class="page-content container-fluid" id="gameResultModifyPage">
         <div class="row">
             <div class="col-md-12">
-                <div class="panel panel-bordered">
-                    <div class="panel-body">
-                        @if ($isServerSide)
-                            <form method="get" class="form-search">
-                                <div id="search-input">
-                                    <select id="search_key" name="key">
-                                        @foreach($searchable as $key)
-                                            <option value="{{ $key }}" @if($search->key == $key){{ 'selected' }}@endif>{{ ucwords(str_replace('_', ' ', $key)) }}</option>
-                                        @endforeach
-                                    </select>
-                                    <select id="filter" name="filter">
-                                        <option value="contains" @if($search->filter == "contains"){{ 'selected' }}@endif>contains</option>
-                                        <option value="equals" @if($search->filter == "equals"){{ 'selected' }}@endif>=</option>
-                                    </select>
-                                    <div class="input-group col-md-12">
-                                        <input type="text" class="form-control" placeholder="{{ __('voyager::generic.search') }}" name="s" value="{{ $search->value }}">
-                                        <span class="input-group-btn">
-                                            <button class="btn btn-info btn-lg" type="submit">
-                                                <i class="voyager-search"></i>
-                                            </button>
-                                        </span>
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="nav-item">
+                        <a class="nav-link active" href="#cancel-game" aria-controls="cancel-game" role="tab" data-toggle="tab"><b>取消牌局</b></a>
+                    </li>
+                    <li role="presentation" class="nav-item">
+                        <a class="nav-link active" href="#modify-game" aria-controls="modify-game" role="tab" data-toggle="tab"><b>修改牌局</b></a>
+                    </li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane fade in active" id="cancel-game">
+                        <form method="POST" action="{{ route('put-game-result') }}" onsubmit="return confirm('＃提示：確定要取消牌局？(牌局取消後不可復原)')">
+                            <!-- Method Field -->
+                            {{ method_field("PUT") }}
+                            <!-- CSRF TOKEN -->
+                            {{ csrf_field() }}
+                            <div class="panel panel-primary panel-bordered">
+
+                                <div class="panel-heading">
+                                    <h3 class="panel-title panel-icon"><i class="voyager-hammer"></i>取消遊戲牌局 <small><font color="black">Game Result Cancel</font></small></h3>
+                                </div>
+
+                                <div class="panel-body">
+                                    <div class="row clearfix">
+                                        <div class="col-md-4 form-group">
+                                            <label for="cancel-TableId"><b>桌號</b> Table</label>
+                                            <select class="form-control" id="cancel-TableId" name="cancel-TableId" value="">
+                                                <option value="A">A</option>
+                                                <option value="B">B</option>
+                                                <option value="C">C</option>
+                                                <option value="D">D</option>
+                                                <option value="E">E</option>
+                                                <option value="F">F</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 form-group">
+                                            <label for="cancel-GameRound"><b>輪號</b> Round</label>
+                                            <input id="cancel-GameRound" name="cancel-GameRound" type="text" class="form-control">
+                                        </div>
+                                        <div class="col-md-4 form-group">
+                                            <label for="cancel-GameRun"><b>局號</b> Run</label>
+                                            <input id="cancel-GameRun" name="cancel-GameRun" type="text" class="form-control">
+                                        </div>
+                                    </div>
+
+                                    <div class="row clearfix">
+                                        <div class="col-md-12 form-group">
+                                            <label class="" for="cancel-ModifiedStatus">牌局狀態</label>
+                                            <input id="cancel-ModifiedStatus" type="text" class="form-control" readonly name="cancel-ModifiedStatus" value="Canceled">
+                                        </div>
+                                        <div class="col-md-12 form-group">
+                                            <label class="" for="cancel-GameSelect">遊戲選擇</label>
+                                            <input id="cancel-GameSelect" type="text" class="form-control" readonly name="cancel-GameSelect" value="Baccarat">
+                                        </div>
+                                    </div>
+
+                                    <div class="row clearfix">
+                                        <div class="col-md-12 form-group">
+                                            <label for="cancel-Announcement"><b>公告訊息</b></label>
+                                            <input class="form-control" readonly id="cancel-Announcement" name="cancel-Announcement" value="[取消公告] 百家樂 -輪-局，因結果錯誤已取消，請會員至歷史帳務查看，謝謝。">
+                                        </div>
+                                    </div>
+
+                                </div><!-- .panel-body -->
+
+                            </div><!-- .panel -->
+
+                            <button type="submit" class="btn pull-right btn-warning btn-block"> 取消牌局 </button>
+                        </form>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="modify-game">
+                        <form method="POST" action="{{ route('put-game-result') }}" onsubmit="return confirm('＃提示：確定要修改牌局？(請確認牌型正確)')">
+                            <!-- Method Field -->
+                            {{ method_field("PUT") }}
+                            <!-- CSRF TOKEN -->
+                            {{ csrf_field() }}
+                            <div class="panel panel-primary panel-bordered">
+
+                                <div class="panel-heading">
+                                    <h3 class="panel-title panel-icon"><i class="voyager-hammer"></i>修改遊戲牌局 <small><font color="black">Game Result Modify</font></small></h3>
+                                    <div class="panel-actions">
+                                        <a class="panel-action voyager-angle-up" data-toggle="panel-collapse" aria-hidden="true"></a>
                                     </div>
                                 </div>
-                            </form>
-                        @endif
-                        <div class="table-responsive">
-                            <table id="dataTable" class="table table-hover">
-                                <thead>
-                                <tr>
-                                    @can('delete',app($dataType->model_name))
-                                        <th>
-                                            <input type="checkbox" class="select_all">
-                                        </th>
-                                    @endcan
-                                    @foreach($dataType->browseRows as $row)
-                                        <th>
-                                            @if ($isServerSide)
-                                                <a href="{{ $row->sortByUrl() }}">
-                                                    @endif
-                                                    {{ $row->display_name }}
-                                                    @if ($isServerSide)
-                                                        @if ($row->isCurrentSortField())
-                                                            @if (!isset($_GET['sort_order']) || $_GET['sort_order'] == 'asc')
-                                                                <i class="voyager-angle-up pull-right"></i>
-                                                            @else
-                                                                <i class="voyager-angle-down pull-right"></i>
-                                                            @endif
-                                                        @endif
-                                                </a>
-                                            @endif
-                                        </th>
-                                    @endforeach
-                                    <th class="actions text-right">{{ __('voyager::generic.actions') }}</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($dataTypeContent as $data)
-                                    <tr>
-                                        @can('delete',app($dataType->model_name))
-                                            <td>
-                                                <input type="checkbox" name="row_id" id="checkbox_{{ $data->getKey() }}" value="{{ $data->getKey() }}">
-                                            </td>
-                                        @endcan
-                                        @foreach($dataType->browseRows as $row)
-                                            <td>
-                                                <?php $options = json_decode($row->details); ?>
-                                                @if($row->type == 'image')
-                                                    <img src="@if( !filter_var($data->{$row->field}, FILTER_VALIDATE_URL)){{ Voyager::image( $data->{$row->field} ) }}@else{{ $data->{$row->field} }}@endif" style="width:100px">
-                                                @elseif($row->type == 'relationship')
-                                                    @include('voyager::formfields.relationship', ['view' => 'browse'])
-                                                @elseif($row->type == 'select_multiple')
-                                                    @if(property_exists($options, 'relationship'))
 
-                                                        @foreach($data->{$row->field} as $item)
-                                                            @if($item->{$row->field . '_page_slug'})
-                                                                <a href="{{ $item->{$row->field . '_page_slug'} }}">{{ $item->{$row->field} }}</a>@if(!$loop->last), @endif
-                                                            @else
-                                                                {{ $item->{$row->field} }}
-                                                            @endif
-                                                        @endforeach
+                                <div class="panel-body">
+                                    <div class="row clearfix">
+                                        <div class="col-md-4 form-group">
+                                            <label for="modify-Tableid"><b>桌號</b> Table</label>
+                                            <select class="form-control" id="modify-Tableid" name="modify-Tableid" value="">
+                                                <option value="A">A</option>
+                                                <option value="B">B</option>
+                                                <option value="C">C</option>
+                                                <option value="D">D</option>
+                                                <option value="E">E</option>
+                                                <option value="F">F</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 form-group">
+                                            <label for="modify-GameRound"><b>輪號</b> Round</label>
+                                            <input id="modify-GameRound" type="text" class="form-control" name="modify-GameRound" value="">
+                                        </div>
+                                        <div class="col-md-4 form-group">
+                                            <label for="modify-GameRun"><b>局號</b> Run</label>
+                                            <input id="modify-GameRun" type="text" class="form-control" name="modify-GameRun" value="">
+                                        </div>
+                                    </div>
 
-                                                        {{-- $data->{$row->field}->implode($options->relationship->label, ', ') --}}
-                                                    @elseif(property_exists($options, 'options'))
-                                                        @foreach($data->{$row->field} as $item)
-                                                            {{ $options->options->{$item} . (!$loop->last ? ', ' : '') }}
-                                                        @endforeach
-                                                    @endif
-
-                                                @elseif($row->type == 'select_dropdown' && property_exists($options, 'options'))
-
-                                                    @if($data->{$row->field . '_page_slug'})
-                                                        <a href="{{ $data->{$row->field . '_page_slug'} }}">{!! $options->options->{$data->{$row->field}} !!}</a>
-                                                    @else
-                                                        {!! $options->options->{$data->{$row->field}} or '' !!}
-                                                    @endif
+                                    <div class="row clearfix">
+                                        <div class="col-md-12 form-group">
+                                            <label class="" for="modify-ModifiedStatus"><b>牌局狀態</b></label>
+                                            <input id="modify-ModifiedStatus" type="text" class="form-control" readonly name="modify-ModifiedStatus" value="Modified">
+                                        </div>
+                                        <div class="col-md-12 form-group">
+                                            <label class="" for="modify-GameSelect">遊戲選擇</label>
+                                            <input id="modify-GameSelect" type="text" class="form-control" readonly name="modify-GameSelect" value="Baccarat">
+                                        </div>
+                                    </div>
 
 
-                                                @elseif($row->type == 'select_dropdown' && $data->{$row->field . '_page_slug'})
-                                                    <a href="{{ $data->{$row->field . '_page_slug'} }}">{{ $data->{$row->field} }}</a>
-                                                @elseif($row->type == 'date' || $row->type == 'timestamp')
-                                                    {{ $options && property_exists($options, 'format') ? \Carbon\Carbon::parse($data->{$row->field})->formatLocalized($options->format) : $data->{$row->field} }}
-                                                @elseif($row->type == 'checkbox')
-                                                    @if($options && property_exists($options, 'on') && property_exists($options, 'off'))
-                                                        @if($data->{$row->field})
-                                                            <span class="label label-info">{{ $options->on }}</span>
-                                                        @else
-                                                            <span class="label label-primary">{{ $options->off }}</span>
-                                                        @endif
-                                                    @else
-                                                        {{ $data->{$row->field} }}
-                                                    @endif
-                                                @elseif($row->type == 'color')
-                                                    <span class="badge badge-lg" style="background-color: {{ $data->{$row->field} }}">{{ $data->{$row->field} }}</span>
-                                                @elseif($row->type == 'text')
-                                                    @include('voyager::multilingual.input-hidden-bread-browse')
-                                                    <div class="readmore">{{ mb_strlen( $data->{$row->field} ) > 200 ? mb_substr($data->{$row->field}, 0, 200) . ' ...' : $data->{$row->field} }}</div>
-                                                @elseif($row->type == 'text_area')
-                                                    @include('voyager::multilingual.input-hidden-bread-browse')
-                                                    <div class="readmore">{{ mb_strlen( $data->{$row->field} ) > 200 ? mb_substr($data->{$row->field}, 0, 200) . ' ...' : $data->{$row->field} }}</div>
-                                                @elseif($row->type == 'file' && !empty($data->{$row->field}) )
-                                                    @include('voyager::multilingual.input-hidden-bread-browse')
-                                                    @if(json_decode($data->{$row->field}))
-                                                        @foreach(json_decode($data->{$row->field}) as $file)
-                                                            <a href="{{ Storage::disk(config('voyager.storage.disk'))->url($file->download_link) ?: '' }}" target="_blank">
-                                                                {{ $file->original_name ?: '' }}
-                                                            </a>
-                                                            <br/>
-                                                        @endforeach
-                                                    @else
-                                                        <a href="{{ Storage::disk(config('voyager.storage.disk'))->url($data->{$row->field}) }}" target="_blank">
-                                                            Download
-                                                        </a>
-                                                    @endif
-                                                @elseif($row->type == 'rich_text_box')
-                                                    @include('voyager::multilingual.input-hidden-bread-browse')
-                                                    <div class="readmore">{{ mb_strlen( strip_tags($data->{$row->field}, '<b><i><u>') ) > 200 ? mb_substr(strip_tags($data->{$row->field}, '<b><i><u>'), 0, 200) . ' ...' : strip_tags($data->{$row->field}, '<b><i><u>') }}</div>
-                                                @elseif($row->type == 'coordinates')
-                                                    @include('voyager::partials.coordinates-static-image')
-                                                @elseif($row->type == 'multiple_images')
-                                                    @php $images = json_decode($data->{$row->field}); @endphp
-                                                    @if($images)
-                                                        @php $images = array_slice($images, 0, 3); @endphp
-                                                        @foreach($images as $image)
-                                                            <img src="@if( !filter_var($image, FILTER_VALIDATE_URL)){{ Voyager::image( $image ) }}@else{{ $image }}@endif" style="width:50px">
-                                                        @endforeach
-                                                    @endif
-                                                @else
-                                                    @include('voyager::multilingual.input-hidden-bread-browse')
-                                                    <span>{{ $data->{$row->field} }}</span>
-                                                @endif
-                                            </td>
-                                        @endforeach
-                                        <td class="no-sort no-click" id="bread-actions">
-                                            @foreach(Voyager::actions() as $action)
-                                                @include('voyager::bread.partials.actions', ['action' => $action])
-                                            @endforeach
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        @if ($isServerSide)
-                            <div class="pull-left">
-                                <div role="status" class="show-res" aria-live="polite">{{ trans_choice(
-                                    'voyager::generic.showing_entries', $dataTypeContent->total(), [
-                                        'from' => $dataTypeContent->firstItem(),
-                                        'to' => $dataTypeContent->lastItem(),
-                                        'all' => $dataTypeContent->total()
-                                    ]) }}</div>
-                            </div>
-                            <div class="pull-right">
-                                {{ $dataTypeContent->appends([
-                                    's' => $search->value,
-                                    'filter' => $search->filter,
-                                    'key' => $search->key,
-                                    'order_by' => $orderBy,
-                                    'sort_order' => $sortOrder
-                                ])->links() }}
-                            </div>
-                        @endif
+                                    <div class="row clearfix" id="PostModify">
+                                        <div class="col-md-2 form-group">
+                                            <label for="player-card-3"><b>閒家3</b> </label>
+                                            <select class="js-card-Select2  form-control" id="player-card-3" name="player-card-3" value="">
+                                                <option value="">無</option>
+                                                <optgroup label="紅心">
+                                                    <option value="H1">紅心1</option>
+                                                    <option value="H2">紅心2</option>
+                                                    <option value="H3">紅心3</option>
+                                                    <option value="H4">紅心4</option>
+                                                    <option value="H5">紅心5</option>
+                                                    <option value="H6">紅心6</option>
+                                                    <option value="H7">紅心7</option>
+                                                    <option value="H8">紅心8</option>
+                                                    <option value="H9">紅心9</option>
+                                                    <option value="H0">紅心10</option>
+                                                    <option value="HJ">紅心J</option>
+                                                    <option value="HQ">紅心Q</option>
+                                                    <option value="HK">紅心K</option>
+                                                </optgroup>
+                                                <optgroup label="黑桃">
+                                                    <option value="S1">黑桃1</option>
+                                                    <option value="S2">黑桃2</option>
+                                                    <option value="S3">黑桃3</option>
+                                                    <option value="S4">黑桃4</option>
+                                                    <option value="S5">黑桃5</option>
+                                                    <option value="S6">黑桃6</option>
+                                                    <option value="S7">黑桃7</option>
+                                                    <option value="S8">黑桃8</option>
+                                                    <option value="S9">黑桃9</option>
+                                                    <option value="S0">黑桃10</option>
+                                                    <option value="SJ">黑桃J</option>
+                                                    <option value="SQ">黑桃Q</option>
+                                                    <option value="SK">黑桃K</option>
+                                                </optgroup>
+                                                <optgroup label="梅花">
+                                                    <option value="C1">梅花1</option>
+                                                    <option value="C2">梅花2</option>
+                                                    <option value="C3">梅花3</option>
+                                                    <option value="C4">梅花4</option>
+                                                    <option value="C5">梅花5</option>
+                                                    <option value="C6">梅花6</option>
+                                                    <option value="C7">梅花7</option>
+                                                    <option value="C8">梅花8</option>
+                                                    <option value="C9">梅花9</option>
+                                                    <option value="C0">梅花10</option>
+                                                    <option value="CJ">梅花J</option>
+                                                    <option value="CQ">梅花Q</option>
+                                                    <option value="CK">梅花K</option>
+                                                </optgroup>
+                                                <optgroup label="方塊">
+                                                    <option value="D1">方塊1</option>
+                                                    <option value="D2">方塊2</option>
+                                                    <option value="D3">方塊3</option>
+                                                    <option value="D4">方塊4</option>
+                                                    <option value="D5">方塊5</option>
+                                                    <option value="D6">方塊6</option>
+                                                    <option value="D7">方塊7</option>
+                                                    <option value="D8">方塊8</option>
+                                                    <option value="D9">方塊9</option>
+                                                    <option value="D0">方塊10</option>
+                                                    <option value="DJ">方塊J</option>
+                                                    <option value="DQ">方塊Q</option>
+                                                    <option value="DK">方塊K</option>
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2 form-group">
+                                            <label for="player-card-2"><b>閒家2</b></label>
+                                            <select class="js-card-Select2  form-control" id="player-card-2" name="player-card-2" value="H1">
+                                                <optgroup label="紅心">
+                                                    <option value="H1">紅心1</option>
+                                                    <option value="H2">紅心2</option>
+                                                    <option value="H3">紅心3</option>
+                                                    <option value="H4">紅心4</option>
+                                                    <option value="H5">紅心5</option>
+                                                    <option value="H6">紅心6</option>
+                                                    <option value="H7">紅心7</option>
+                                                    <option value="H8">紅心8</option>
+                                                    <option value="H9">紅心9</option>
+                                                    <option value="H0">紅心10</option>
+                                                    <option value="HJ">紅心J</option>
+                                                    <option value="HQ">紅心Q</option>
+                                                    <option value="HK">紅心K</option>
+                                                </optgroup>
+                                                <optgroup label="黑桃">
+                                                    <option value="S1">黑桃1</option>
+                                                    <option value="S2">黑桃2</option>
+                                                    <option value="S3">黑桃3</option>
+                                                    <option value="S4">黑桃4</option>
+                                                    <option value="S5">黑桃5</option>
+                                                    <option value="S6">黑桃6</option>
+                                                    <option value="S7">黑桃7</option>
+                                                    <option value="S8">黑桃8</option>
+                                                    <option value="S9">黑桃9</option>
+                                                    <option value="S0">黑桃10</option>
+                                                    <option value="SJ">黑桃J</option>
+                                                    <option value="SQ">黑桃Q</option>
+                                                    <option value="SK">黑桃K</option>
+                                                </optgroup>
+                                                <optgroup label="梅花">
+                                                    <option value="C1">梅花1</option>
+                                                    <option value="C2">梅花2</option>
+                                                    <option value="C3">梅花3</option>
+                                                    <option value="C4">梅花4</option>
+                                                    <option value="C5">梅花5</option>
+                                                    <option value="C6">梅花6</option>
+                                                    <option value="C7">梅花7</option>
+                                                    <option value="C8">梅花8</option>
+                                                    <option value="C9">梅花9</option>
+                                                    <option value="C0">梅花10</option>
+                                                    <option value="CJ">梅花J</option>
+                                                    <option value="CQ">梅花Q</option>
+                                                    <option value="CK">梅花K</option>
+                                                </optgroup>
+                                                <optgroup label="方塊">
+                                                    <option value="D1">方塊1</option>
+                                                    <option value="D2">方塊2</option>
+                                                    <option value="D3">方塊3</option>
+                                                    <option value="D4">方塊4</option>
+                                                    <option value="D5">方塊5</option>
+                                                    <option value="D6">方塊6</option>
+                                                    <option value="D7">方塊7</option>
+                                                    <option value="D8">方塊8</option>
+                                                    <option value="D9">方塊9</option>
+                                                    <option value="D0">方塊10</option>
+                                                    <option value="DJ">方塊J</option>
+                                                    <option value="DQ">方塊Q</option>
+                                                    <option value="DK">方塊K</option>
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2 form-group">
+                                            <label for="player-card-1"><b>閒家1</b></label>
+                                            <select class="js-card-Select2  form-control" id="player-card-1" name="player-card-1" value="H1">
+                                                <optgroup label="紅心">
+                                                    <option value="H1">紅心1</option>
+                                                    <option value="H2">紅心2</option>
+                                                    <option value="H3">紅心3</option>
+                                                    <option value="H4">紅心4</option>
+                                                    <option value="H5">紅心5</option>
+                                                    <option value="H6">紅心6</option>
+                                                    <option value="H7">紅心7</option>
+                                                    <option value="H8">紅心8</option>
+                                                    <option value="H9">紅心9</option>
+                                                    <option value="H0">紅心10</option>
+                                                    <option value="HJ">紅心J</option>
+                                                    <option value="HQ">紅心Q</option>
+                                                    <option value="HK">紅心K</option>
+                                                </optgroup>
+                                                <optgroup label="黑桃">
+                                                    <option value="S1">黑桃1</option>
+                                                    <option value="S2">黑桃2</option>
+                                                    <option value="S3">黑桃3</option>
+                                                    <option value="S4">黑桃4</option>
+                                                    <option value="S5">黑桃5</option>
+                                                    <option value="S6">黑桃6</option>
+                                                    <option value="S7">黑桃7</option>
+                                                    <option value="S8">黑桃8</option>
+                                                    <option value="S9">黑桃9</option>
+                                                    <option value="S0">黑桃10</option>
+                                                    <option value="SJ">黑桃J</option>
+                                                    <option value="SQ">黑桃Q</option>
+                                                    <option value="SK">黑桃K</option>
+                                                </optgroup>
+                                                <optgroup label="梅花">
+                                                    <option value="C1">梅花1</option>
+                                                    <option value="C2">梅花2</option>
+                                                    <option value="C3">梅花3</option>
+                                                    <option value="C4">梅花4</option>
+                                                    <option value="C5">梅花5</option>
+                                                    <option value="C6">梅花6</option>
+                                                    <option value="C7">梅花7</option>
+                                                    <option value="C8">梅花8</option>
+                                                    <option value="C9">梅花9</option>
+                                                    <option value="C0">梅花10</option>
+                                                    <option value="CJ">梅花J</option>
+                                                    <option value="CQ">梅花Q</option>
+                                                    <option value="CK">梅花K</option>
+                                                </optgroup>
+                                                <optgroup label="方塊">
+                                                    <option value="D1">方塊1</option>
+                                                    <option value="D2">方塊2</option>
+                                                    <option value="D3">方塊3</option>
+                                                    <option value="D4">方塊4</option>
+                                                    <option value="D5">方塊5</option>
+                                                    <option value="D6">方塊6</option>
+                                                    <option value="D7">方塊7</option>
+                                                    <option value="D8">方塊8</option>
+                                                    <option value="D9">方塊9</option>
+                                                    <option value="D0">方塊10</option>
+                                                    <option value="DJ">方塊J</option>
+                                                    <option value="DQ">方塊Q</option>
+                                                    <option value="DK">方塊K</option>
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2 form-group">
+                                            <label for="banker-card-3"><b>莊家3</b></label>
+                                            <select class="js-card-Select2  form-control" id="banker-card-3" name="banker-card-3"  value="">
+                                                <option value="">無</option>
+                                                <optgroup label="紅心">
+                                                    <option value="H1">紅心1</option>
+                                                    <option value="H2">紅心2</option>
+                                                    <option value="H3">紅心3</option>
+                                                    <option value="H4">紅心4</option>
+                                                    <option value="H5">紅心5</option>
+                                                    <option value="H6">紅心6</option>
+                                                    <option value="H7">紅心7</option>
+                                                    <option value="H8">紅心8</option>
+                                                    <option value="H9">紅心9</option>
+                                                    <option value="H0">紅心10</option>
+                                                    <option value="HJ">紅心J</option>
+                                                    <option value="HQ">紅心Q</option>
+                                                    <option value="HK">紅心K</option>
+                                                </optgroup>
+                                                <optgroup label="黑桃">
+                                                    <option value="S1">黑桃1</option>
+                                                    <option value="S2">黑桃2</option>
+                                                    <option value="S3">黑桃3</option>
+                                                    <option value="S4">黑桃4</option>
+                                                    <option value="S5">黑桃5</option>
+                                                    <option value="S6">黑桃6</option>
+                                                    <option value="S7">黑桃7</option>
+                                                    <option value="S8">黑桃8</option>
+                                                    <option value="S9">黑桃9</option>
+                                                    <option value="S0">黑桃10</option>
+                                                    <option value="SJ">黑桃J</option>
+                                                    <option value="SQ">黑桃Q</option>
+                                                    <option value="SK">黑桃K</option>
+                                                </optgroup>
+                                                <optgroup label="梅花">
+                                                    <option value="C1">梅花1</option>
+                                                    <option value="C2">梅花2</option>
+                                                    <option value="C3">梅花3</option>
+                                                    <option value="C4">梅花4</option>
+                                                    <option value="C5">梅花5</option>
+                                                    <option value="C6">梅花6</option>
+                                                    <option value="C7">梅花7</option>
+                                                    <option value="C8">梅花8</option>
+                                                    <option value="C9">梅花9</option>
+                                                    <option value="C0">梅花10</option>
+                                                    <option value="CJ">梅花J</option>
+                                                    <option value="CQ">梅花Q</option>
+                                                    <option value="CK">梅花K</option>
+                                                </optgroup>
+                                                <optgroup label="方塊">
+                                                    <option value="D1">方塊1</option>
+                                                    <option value="D2">方塊2</option>
+                                                    <option value="D3">方塊3</option>
+                                                    <option value="D4">方塊4</option>
+                                                    <option value="D5">方塊5</option>
+                                                    <option value="D6">方塊6</option>
+                                                    <option value="D7">方塊7</option>
+                                                    <option value="D8">方塊8</option>
+                                                    <option value="D9">方塊9</option>
+                                                    <option value="D0">方塊10</option>
+                                                    <option value="DJ">方塊J</option>
+                                                    <option value="DQ">方塊Q</option>
+                                                    <option value="DK">方塊K</option>
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2 form-group">
+                                            <label for="banker-card-2"><b>莊家2</b></label>
+                                            <select class="js-card-Select2  form-control" id="banker-card-2" name="banker-card-2" value="H1">
+                                                <optgroup label="紅心">
+                                                    <option value="H1">紅心1</option>
+                                                    <option value="H2">紅心2</option>
+                                                    <option value="H3">紅心3</option>
+                                                    <option value="H4">紅心4</option>
+                                                    <option value="H5">紅心5</option>
+                                                    <option value="H6">紅心6</option>
+                                                    <option value="H7">紅心7</option>
+                                                    <option value="H8">紅心8</option>
+                                                    <option value="H9">紅心9</option>
+                                                    <option value="H0">紅心10</option>
+                                                    <option value="HJ">紅心J</option>
+                                                    <option value="HQ">紅心Q</option>
+                                                    <option value="HK">紅心K</option>
+                                                </optgroup>
+                                                <optgroup label="黑桃">
+                                                    <option value="S1">黑桃1</option>
+                                                    <option value="S2">黑桃2</option>
+                                                    <option value="S3">黑桃3</option>
+                                                    <option value="S4">黑桃4</option>
+                                                    <option value="S5">黑桃5</option>
+                                                    <option value="S6">黑桃6</option>
+                                                    <option value="S7">黑桃7</option>
+                                                    <option value="S8">黑桃8</option>
+                                                    <option value="S9">黑桃9</option>
+                                                    <option value="S0">黑桃10</option>
+                                                    <option value="SJ">黑桃J</option>
+                                                    <option value="SQ">黑桃Q</option>
+                                                    <option value="SK">黑桃K</option>
+                                                </optgroup>
+                                                <optgroup label="梅花">
+                                                    <option value="C1">梅花1</option>
+                                                    <option value="C2">梅花2</option>
+                                                    <option value="C3">梅花3</option>
+                                                    <option value="C4">梅花4</option>
+                                                    <option value="C5">梅花5</option>
+                                                    <option value="C6">梅花6</option>
+                                                    <option value="C7">梅花7</option>
+                                                    <option value="C8">梅花8</option>
+                                                    <option value="C9">梅花9</option>
+                                                    <option value="C0">梅花10</option>
+                                                    <option value="CJ">梅花J</option>
+                                                    <option value="CQ">梅花Q</option>
+                                                    <option value="CK">梅花K</option>
+                                                </optgroup>
+                                                <optgroup label="方塊">
+                                                    <option value="D1">方塊1</option>
+                                                    <option value="D2">方塊2</option>
+                                                    <option value="D3">方塊3</option>
+                                                    <option value="D4">方塊4</option>
+                                                    <option value="D5">方塊5</option>
+                                                    <option value="D6">方塊6</option>
+                                                    <option value="D7">方塊7</option>
+                                                    <option value="D8">方塊8</option>
+                                                    <option value="D9">方塊9</option>
+                                                    <option value="D0">方塊10</option>
+                                                    <option value="DJ">方塊J</option>
+                                                    <option value="DQ">方塊Q</option>
+                                                    <option value="DK">方塊K</option>
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2 form-group">
+                                            <label for="banker-card-1"><b>莊家1</b></label>
+                                            <select class="js-card-Select2  form-control" id="banker-card-1" name="banker-card-1" value="H1">
+                                                <optgroup label="紅心">
+                                                    <option value="H1">紅心1</option>
+                                                    <option value="H2">紅心2</option>
+                                                    <option value="H3">紅心3</option>
+                                                    <option value="H4">紅心4</option>
+                                                    <option value="H5">紅心5</option>
+                                                    <option value="H6">紅心6</option>
+                                                    <option value="H7">紅心7</option>
+                                                    <option value="H8">紅心8</option>
+                                                    <option value="H9">紅心9</option>
+                                                    <option value="H0">紅心10</option>
+                                                    <option value="HJ">紅心J</option>
+                                                    <option value="HQ">紅心Q</option>
+                                                    <option value="HK">紅心K</option>
+                                                </optgroup>
+                                                <optgroup label="黑桃">
+                                                    <option value="S1">黑桃1</option>
+                                                    <option value="S2">黑桃2</option>
+                                                    <option value="S3">黑桃3</option>
+                                                    <option value="S4">黑桃4</option>
+                                                    <option value="S5">黑桃5</option>
+                                                    <option value="S6">黑桃6</option>
+                                                    <option value="S7">黑桃7</option>
+                                                    <option value="S8">黑桃8</option>
+                                                    <option value="S9">黑桃9</option>
+                                                    <option value="S0">黑桃10</option>
+                                                    <option value="SJ">黑桃J</option>
+                                                    <option value="SQ">黑桃Q</option>
+                                                    <option value="SK">黑桃K</option>
+                                                </optgroup>
+                                                <optgroup label="梅花">
+                                                    <option value="C1">梅花1</option>
+                                                    <option value="C2">梅花2</option>
+                                                    <option value="C3">梅花3</option>
+                                                    <option value="C4">梅花4</option>
+                                                    <option value="C5">梅花5</option>
+                                                    <option value="C6">梅花6</option>
+                                                    <option value="C7">梅花7</option>
+                                                    <option value="C8">梅花8</option>
+                                                    <option value="C9">梅花9</option>
+                                                    <option value="C0">梅花10</option>
+                                                    <option value="CJ">梅花J</option>
+                                                    <option value="CQ">梅花Q</option>
+                                                    <option value="CK">梅花K</option>
+                                                </optgroup>
+                                                <optgroup label="方塊">
+                                                    <option value="D1">方塊1</option>
+                                                    <option value="D2">方塊2</option>
+                                                    <option value="D3">方塊3</option>
+                                                    <option value="D4">方塊4</option>
+                                                    <option value="D5">方塊5</option>
+                                                    <option value="D6">方塊6</option>
+                                                    <option value="D7">方塊7</option>
+                                                    <option value="D8">方塊8</option>
+                                                    <option value="D9">方塊9</option>
+                                                    <option value="D0">方塊10</option>
+                                                    <option value="DJ">方塊J</option>
+                                                    <option value="DQ">方塊Q</option>
+                                                    <option value="DK">方塊K</option>
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row clearfix">
+                                        <div class="col-md-12 form-group">
+                                            <label for="modify-Announcement"><b>公告訊息</b></label>
+                                            <span class="form-control" readonly id="modify-Announcement">
+                                                [改單公告] 百家樂 -輪-局結果錯誤已重新修正，請會員至歷史帳務查看，謝謝。
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div><!-- .panel-body -->
+
+                            </div><!-- .panel -->
+
+                            <button type="submit" class="btn pull-right btn-warning btn-block"> 改單牌局 </button>
+
+                        </form>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- Single delete modal --}}
-    <div class="modal modal-danger fade" tabindex="-1" id="delete_modal" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="{{ __('voyager::generic.close') }}"><span
-                                aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title"><i class="voyager-trash"></i> {{ __('voyager::generic.delete_question') }} {{ strtolower($dataType->display_name_singular) }}?</h4>
-                </div>
-                <div class="modal-footer">
-                    <form action="#" id="delete_form" method="POST">
-                        {{ method_field("DELETE") }}
-                        {{ csrf_field() }}
-                        <input type="submit" class="btn btn-danger pull-right delete-confirm" value="{{ __('voyager::generic.delete_confirm') }}">
-                    </form>
-                    <button type="button" class="btn btn-default pull-right" data-dismiss="modal">{{ __('voyager::generic.cancel') }}</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+            </div><!-- .col-md-12 -->
+        </div><!-- .row -->
+    </div><!-- .page-content -->
 @stop
 
-@section('css')
-    @if(!$dataType->server_side && config('dashboard.data_tables.responsive'))
-        <link rel="stylesheet" href="{{ voyager_asset('lib/css/responsive.dataTables.min.css') }}">
-    @endif
-@stop
 
-@section('javascript')
-    <!-- DataTables -->
-    @if(!$dataType->server_side && config('dashboard.data_tables.responsive'))
-        <script src="{{ voyager_asset('lib/js/dataTables.responsive.min.js') }}"></script>
-    @endif
+@section('page-js-script')
+    <!-- 公告訊息修改  -->
+
+
+    <!-- 下拉式選單 -->
     <script>
-        $(document).ready(function () {
-                    @if (!$dataType->server_side)
-            var table = $('#dataTable').DataTable({!! json_encode(
-                    array_merge([
-                        "order" => [],
-                        "language" => __('voyager::datatable'),
-                        "columnDefs" => [['targets' => -1, 'searchable' =>  false, 'orderable' => false]],
-                    ],
-                    config('voyager.dashboard.data_tables', []))
-                , true) !!});
-            @else
-            $('#search-input select').select2({
-                minimumResultsForSearch: Infinity
-            });
-            @endif
-
-            @if ($isModelTranslatable)
-            $('.side-body').multilingual();
-            //Reinitialise the multilingual features when they change tab
-            $('#dataTable').on('draw.dt', function(){
-                $('.side-body').data('multilingual').init();
-            })
-            @endif
-            $('.select_all').on('click', function(e) {
-                $('input[name="row_id"]').prop('checked', $(this).prop('checked'));
-            });
-        });
-
-
-        var deleteFormAction;
-        $('td').on('click', '.delete', function (e) {
-            $('#delete_form')[0].action = '{{ route('voyager.'.$dataType->slug.'.destroy', ['id' => '__id']) }}'.replace('__id', $(this).data('id'));
-            $('#delete_modal').modal('show');
+        $(document).ready(function() {
+            $('.js-card-Select2 ').select2();
         });
     </script>
 @stop
