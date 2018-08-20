@@ -40,4 +40,20 @@ class BaccaratRepository
             ->where('ModifiedStatus', '=', $status)
             ->get();
     }
+
+    /**
+     * @param $request
+     */
+    public function modifyBaccaratHistory($request)
+    {
+
+    }
+
+    /**
+     * @param $request
+     */
+    public function cancelBaccaratHistory($request)
+    {
+
+    }
 }

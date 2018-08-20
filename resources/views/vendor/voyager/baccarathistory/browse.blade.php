@@ -4,7 +4,6 @@
     <div class="container-fluid">
         <h1 class="page-title">
             <i class="voyager-list"></i> 遊戲牌局改單取消
-            {{ $responseString }}
         </h1>
     </div>
 @stop
@@ -35,10 +34,17 @@
                     </li>
                 </ul>
 
+                <br>
+
+                <div class="alert alert-warning">
+                    <strong>Info!</strong> {{ $responseString }}.
+                </div>
+
+
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane fade in active" id="cancel-game">
-                        <form method="POST" action="{{ route('put-game-result') }}" onsubmit="return confirm('＃提示：確定要取消牌局？(牌局取消後不可復原)')">
+                        <form method="POST" action="{{ route('cancel-game-result') }}" onsubmit="return confirm('＃提示：確定要取消牌局？(牌局取消後不可復原)')">
                             <!-- Method Field -->
                             {{ method_field("PUT") }}
                             <!-- CSRF TOKEN -->
@@ -98,7 +104,7 @@
                         </form>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="modify-game">
-                        <form method="POST" action="{{ route('put-game-result') }}" onsubmit="return confirm('＃提示：確定要修改牌局？(請確認牌型正確)')">
+                        <form method="POST" action="{{ route('modify-game-result') }}" onsubmit="return confirm('＃提示：確定要修改牌局？(請確認牌型正確)')">
                             <!-- Method Field -->
                             {{ method_field("PUT") }}
                             <!-- CSRF TOKEN -->
@@ -115,8 +121,8 @@
                                 <div class="panel-body">
                                     <div class="row clearfix">
                                         <div class="col-md-4 form-group">
-                                            <label for="modify-Tableid"><b>桌號</b> Table</label>
-                                            <select class="form-control" id="modify-Tableid" name="modify-Tableid" value="">
+                                            <label for="modify-TableId"><b>桌號</b> Table</label>
+                                            <select class="form-control" id="modify-TableId" name="modify-TableId">
                                                 <option value="A">A</option>
                                                 <option value="B">B</option>
                                                 <option value="C">C</option>
@@ -150,7 +156,7 @@
                                     <div class="row clearfix" id="PostModify">
                                         <div class="col-md-2 form-group">
                                             <label for="player-card-3"><b>閒家3</b> </label>
-                                            <select class="js-card-Select2  form-control" id="player-card-3" name="player-card-3" value="">
+                                            <select class="js-card-Select2  form-control" id="player-card-3" name="player-card-3">
                                                 <option value="">無</option>
                                                 <optgroup label="紅心">
                                                     <option value="H1">紅心1</option>

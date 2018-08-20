@@ -99,8 +99,6 @@ class GameResultModifyController extends VoyagerBaseController
             $view = "voyager::$slug.browse";
         }
 
-
-
         return Voyager::view($view, compact(
             'dataType',
             'dataTypeContent',
@@ -113,6 +111,7 @@ class GameResultModifyController extends VoyagerBaseController
             'responseString'
         ));
     }
+
 
     public function edit(Request $request, $id)
     {
@@ -157,7 +156,24 @@ class GameResultModifyController extends VoyagerBaseController
     {
         Voyager::canOrFail('browse_BaccaratHistory');
 
+        // 1. Call Game Server API to cancel remote Database
         $responseString = $this->gameResultService->putCancel($request);
+
+        // 2. Modify On-spot Database
+        $this->gameResultService->modifyBaccaratHistory($request);
+
+        return view('vendor.voyager.baccarathistory.browse', compact('responseString'));
+    }
+
+    public function putModify(Request $request)
+    {
+        Voyager::canOrFail('browse_BaccaratHistory');
+
+        // 1. Call Game Server API to modify remote Database
+        $responseString = $this->gameResultService->putModify($request);
+
+        // 2. Modify On-spot Database
+        $this->gameResultService->modifyBaccaratHistory($request);
 
         return view('vendor.voyager.baccarathistory.browse', compact('responseString'));
     }
