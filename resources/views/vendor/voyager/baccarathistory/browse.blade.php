@@ -36,10 +36,22 @@
 
                 <br>
 
+                @if (isset($responseString))
                 <div class="alert alert-warning">
                     <strong>Info!</strong> {{ $responseString }}.
                 </div>
+                @endif
 
+                @if (count($errors))
+                    <div class="alert alert-danger fade in">
+                        <strong>訊息</strong>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
                 <!-- Tab panes -->
                 <div class="tab-content">

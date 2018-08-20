@@ -4,10 +4,13 @@ namespace App\Http\Controllers\CasinoAdmin;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use TCG\Voyager\Database\Schema\SchemaManager;
 use TCG\Voyager\Facades\Voyager;
 use TCG\Voyager\Http\Controllers\VoyagerBaseController;
 use App\Services\CasinoAdmin\GameResultService;
+use App\Http\Requests\GameResultModifyRequest;
+use App\Http\Requests\GameResultCancelRequest;
 
 
 /**
@@ -99,7 +102,7 @@ class GameResultModifyController extends VoyagerBaseController
             $view = "voyager::$slug.browse";
         }
 
-        return Voyager::view($view, compact(
+        return Voyager::view('vendor.voyager.baccarathistory.browse', compact(
             'dataType',
             'dataTypeContent',
             'isModelTranslatable',
@@ -112,69 +115,57 @@ class GameResultModifyController extends VoyagerBaseController
         ));
     }
 
-
-    public function edit(Request $request, $id)
-    {
-        $slug = $this->getSlug($request);
-
-        $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
-
-        $relationships = $this->getRelationships($dataType);
-
-        $dataTypeContent = (strlen($dataType->model_name) != 0)
-            ? app($dataType->model_name)->with($relationships)->findOrFail($id)
-            : DB::table($dataType->name)->where('id', $id)->first(); // If Model doest exist, get data from table name
-
-        foreach ($dataType->editRows as $key => $row) {
-            $details = json_decode($row->details);
-            $dataType->editRows[$key]['col_width'] = isset($details->width) ? $details->width : 100;
-        }
-
-        // If a column has a relationship associated with it, we do not want to show that field
-        $this->removeRelationshipField($dataType, 'edit');
-
-        // Check permission
-        $this->authorize('edit', $dataTypeContent);
-
-        // Check if BREAD is Translatable
-        $isModelTranslatable = is_bread_translatable($dataTypeContent);
-
-        $view = 'voyager::bread.edit-add';
-
-        if (view()->exists("voyager::$slug.edit-add")) {
-            $view = "voyager::$slug.edit-add";
-        }
-
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable'));
-    }
-
     /**
-     * @param Request $request
+     * @param GameResultCancelRequest $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function putCancel(Request $request)
+    public function putCancel(GameResultCancelRequest $request)
     {
         Voyager::canOrFail('browse_BaccaratHistory');
 
         // 1. Call Game Server API to cancel remote Database
         $responseString = $this->gameResultService->putCancel($request);
 
+        if ( !$this->isResultSuccess($responseString)) {
+            return redirect('admin/baccarathistory')->withErrors([$responseString]);
+        }
+
         // 2. Modify On-spot Database
         $this->gameResultService->modifyBaccaratHistory($request);
 
-        return view('vendor.voyager.baccarathistory.browse', compact('responseString'));
+        return redirect('admin/baccarathistory')->with('Message', $responseString);
     }
 
-    public function putModify(Request $request)
+    /**
+     * @param GameResultModifyRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function putModify(GameResultModifyRequest $request)
     {
         Voyager::canOrFail('browse_BaccaratHistory');
 
         // 1. Call Game Server API to modify remote Database
         $responseString = $this->gameResultService->putModify($request);
 
+        if ( !$this->isResultSuccess($responseString)) {
+            return redirect('admin/baccarathistory')->withErrors([$responseString]);
+        }
+
         // 2. Modify On-spot Database
         $this->gameResultService->modifyBaccaratHistory($request);
 
-        return view('vendor.voyager.baccarathistory.browse', compact('responseString'));
+        return redirect('admin/baccarathistory')->with('Message', $responseString);
+    }
+
+    /**
+     * @param $responseString
+     * @return bool
+     */
+    private function isResultSuccess($responseString)
+    {
+        $temp = (explode(",", explode(":", $responseString)[2])[0]);
+        $result = str_replace('"', '', $temp);
+
+        return $result == "error" ? false : true;
     }
 }

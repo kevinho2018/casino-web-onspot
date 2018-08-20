@@ -19,6 +19,10 @@ Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 
     // Override Route
+    Route::get('baccaratHistory-page', 'CasinoAdmin\GameResultModifyController@index')
+        ->name('baccaratHistory-page')
+        ->middleware('admin.user');
+
     Route::put('cancel-game-result', 'CasinoAdmin\GameResultModifyController@putCancel')
         ->name('cancel-game-result')
         ->middleware('admin.user');
