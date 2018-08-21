@@ -43,9 +43,9 @@ Route::group(
                 ->name('videos');
 
             // 查詢帳號權限
-            Route::get('video/videoSearch', 'VideoController@getVideoFilePath')
-                ->middleware(['casino-api.verify:tableId,round,run'])
-                ->name('videos');
+            Route::get('account/accountValidate', 'AccountController@getLoginValidation')
+                ->middleware(['casino-api.verify:email,password'])
+                ->name('accountValidate');
         });
     }
 );

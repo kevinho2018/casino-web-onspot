@@ -35,7 +35,12 @@ class AccountService
     public function getLoginValidation($input)
     {
         $hashedPassword = $this->usersRepository->getPasswordByEmail($input['email']);
+        $plain_text = ($input['password']);
 
-        return Hash::check($input['password'], $hashedPassword) ? true : false;
+        if (Hash::check($plain_text, $hashedPassword['password']) ) {
+            return json_encode(['status' => 'Success']);
+        }
+
+        return json_encode(['status' => 'Failed']);
     }
 }

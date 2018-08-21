@@ -22,6 +22,16 @@ class UsersRepository
     protected $users;
 
     /**
+     * UsersRepository constructor.
+     * @param users $users
+     */
+    public function __construct(
+        users $users
+    ) {
+        $this->users = $users;
+    }
+
+    /**
      * @param $email
      * @return \Illuminate\Database\Eloquent\Model|null|object|static
      */
