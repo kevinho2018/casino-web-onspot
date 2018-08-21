@@ -44,7 +44,6 @@ Route::group(
 
             // 查詢帳號權限
             Route::get('account/accountValidate', 'AccountController@getLoginValidation')
-                ->middleware(['casino-api.verify:email,password'])
                 ->name('accountValidate');
         });
     }

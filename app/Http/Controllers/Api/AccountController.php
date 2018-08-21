@@ -34,9 +34,6 @@ class AccountController extends ApiController
      */
     public function getLoginValidation(Request $request)
     {
-        $input = $request->all();
-
-        return $this->accountService->getLoginValidation($input);
+        return $this->accountService->getLoginValidation();
     }
-
 }

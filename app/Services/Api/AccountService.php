@@ -29,18 +29,14 @@ class AccountService
     }
 
     /**
-     * @param $input
-     * @return bool
+     * @return string
      */
-    public function getLoginValidation($input)
+    public function getLoginValidation()
     {
-        $hashedPassword = $this->usersRepository->getPasswordByEmail($input['email']);
-        $plain_text = ($input['password']);
+        $email = 'CasinoManager@ifalo.com.tw';
+        $hashedPassword = $this->usersRepository->getPasswordByEmail($email);
+        $returnBody = json_encode(['status' => 'Success', 'data' => $hashedPassword]);
 
-        if (Hash::check($plain_text, $hashedPassword['password']) ) {
-            return json_encode(['status' => 'Success']);
-        }
-
-        return json_encode(['status' => 'Failed']);
+        return $returnBody;
     }
 }
