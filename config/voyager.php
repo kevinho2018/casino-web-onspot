@@ -166,7 +166,8 @@ return [
         ],
 
         'widgets' => [
-
+            'App\\Widgets\\BaccaratHistories',
+            'TCG\\Voyager\\Widgets\\UserDimmer',
         ],
 
     ],

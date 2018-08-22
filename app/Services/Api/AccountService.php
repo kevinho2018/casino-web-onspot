@@ -9,7 +9,6 @@
 namespace App\Services\Api;
 
 use App\Repositories\UsersRepository;
-use Hash;
 
 /**
  * Class AccountService
@@ -35,8 +34,8 @@ class AccountService
     {
         $email = 'CasinoManager@ifalo.com.tw';
         $hashedPassword = $this->usersRepository->getPasswordByEmail($email);
-        $returnBody = json_encode(['status' => 'Success', 'data' => $hashedPassword]);
+        $returnBody = ['status' => 'Success', 'data' => $hashedPassword];
 
-        return $returnBody;
+        return response()->json($returnBody);
     }
 }

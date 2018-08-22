@@ -26,11 +26,11 @@
 
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="nav-item">
+                    <li role="presentation" class="nav-item active">
                         <a class="nav-link active" href="#cancel-game" aria-controls="cancel-game" role="tab" data-toggle="tab"><b>取消牌局</b></a>
                     </li>
                     <li role="presentation" class="nav-item">
-                        <a class="nav-link active" href="#modify-game" aria-controls="modify-game" role="tab" data-toggle="tab"><b>修改牌局</b></a>
+                        <a class="nav-link" href="#modify-game" aria-controls="modify-game" role="tab" data-toggle="tab"><b>修改牌局</b></a>
                     </li>
                 </ul>
 

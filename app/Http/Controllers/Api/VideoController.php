@@ -29,7 +29,7 @@ class VideoController extends Controller
 
     /**
      * @param Request $request
-     * @return \App\Services\Api\BaccaratHistoryCollection|string
+     * @return \App\Http\Resources\VideoRecordCollection|\Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection|string|static[]
      */
     public function getVideoFilePath(Request $request)
     {
