@@ -10,13 +10,10 @@
 
 @section('custom-css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
-@stop
 
-@section('page-js-files')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-
 @stop
 
 @section('content')
@@ -27,10 +24,10 @@
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="nav-item active">
-                        <a class="nav-link active" href="#cancel-game" aria-controls="cancel-game" role="tab" data-toggle="tab"><b>取消牌局</b></a>
+                        <a class="nav-link active" href="#cancel-game" aria-controls="cancel-game" role="tab" data-toggle="tab"><font color="red"><b>取消牌局</b></font></a>
                     </li>
                     <li role="presentation" class="nav-item">
-                        <a class="nav-link" href="#modify-game" aria-controls="modify-game" role="tab" data-toggle="tab"><b>修改牌局</b></a>
+                        <a class="nav-link" href="#modify-game" aria-controls="modify-game" role="tab" data-toggle="tab"><font color="orange"><b>修改牌局</b></font></a>
                     </li>
                 </ul>
 
@@ -71,7 +68,7 @@
                                     <div class="row clearfix">
                                         <div class="col-md-4 form-group">
                                             <label for="cancel-TableId"><b>桌號</b> Table</label>
-                                            <select class="form-control" id="cancel-TableId" name="cancel-TableId" value="">
+                                            <select class="form-control" id="cancel-TableId" name="cancel-TableId">
                                                 <option value="A">A</option>
                                                 <option value="B">B</option>
                                                 <option value="C">C</option>
@@ -82,21 +79,21 @@
                                         </div>
                                         <div class="col-md-4 form-group">
                                             <label for="cancel-GameRound"><b>輪號</b> Round</label>
-                                            <input id="cancel-GameRound" name="cancel-GameRound" type="text" class="form-control">
+                                            <input id="cancel-GameRound" name="cancel-GameRound" type="text" class="form-control" placeholder="必填欄位">
                                         </div>
                                         <div class="col-md-4 form-group">
                                             <label for="cancel-GameRun"><b>局號</b> Run</label>
-                                            <input id="cancel-GameRun" name="cancel-GameRun" type="text" class="form-control">
+                                            <input id="cancel-GameRun" name="cancel-GameRun" type="text" class="form-control" placeholder="必填欄位">
                                         </div>
                                     </div>
 
                                     <div class="row clearfix">
                                         <div class="col-md-12 form-group">
-                                            <label class="" for="cancel-ModifiedStatus">牌局狀態</label>
+                                            <label class="" for="cancel-ModifiedStatus"><b>牌局狀態</b></label>
                                             <input id="cancel-ModifiedStatus" type="text" class="form-control" readonly name="cancel-ModifiedStatus" value="Canceled">
                                         </div>
                                         <div class="col-md-12 form-group">
-                                            <label class="" for="cancel-GameSelect">遊戲選擇</label>
+                                            <label class="" for="cancel-GameSelect"><b>遊戲選擇</b></label>
                                             <input id="cancel-GameSelect" type="text" class="form-control" readonly name="cancel-GameSelect" value="Baccarat">
                                         </div>
                                     </div>
@@ -116,7 +113,7 @@
                         </form>
                     </div>
                     <div role="tabpanel" class="tab-pane fade" id="modify-game">
-                        <form method="POST" action="{{ route('modify-game-result') }}" onsubmit="return confirm('＃提示：確定要修改牌局？(請確認牌型正確)')">
+                        <form method="POST" action="{{ route('modify-game-result') }}" onsubmit="return confirm('＃提示：確定要修改牌局？(請確認牌型正確，牌局修改後不可再更改)')">
                             <!-- Method Field -->
                             {{ method_field("PUT") }}
                             <!-- CSRF TOKEN -->
@@ -145,11 +142,11 @@
                                         </div>
                                         <div class="col-md-4 form-group">
                                             <label for="modify-GameRound"><b>輪號</b> Round</label>
-                                            <input id="modify-GameRound" type="text" class="form-control" name="modify-GameRound" value="">
+                                            <input id="modify-GameRound" type="text" class="form-control" name="modify-GameRound" value="" placeholder="必填欄位">
                                         </div>
                                         <div class="col-md-4 form-group">
                                             <label for="modify-GameRun"><b>局號</b> Run</label>
-                                            <input id="modify-GameRun" type="text" class="form-control" name="modify-GameRun" value="">
+                                            <input id="modify-GameRun" type="text" class="form-control" name="modify-GameRun" value="" placeholder="必填欄位">
                                         </div>
                                     </div>
 
@@ -159,7 +156,7 @@
                                             <input id="modify-ModifiedStatus" type="text" class="form-control" readonly name="modify-ModifiedStatus" value="Modified">
                                         </div>
                                         <div class="col-md-12 form-group">
-                                            <label class="" for="modify-GameSelect">遊戲選擇</label>
+                                            <label class="" for="modify-GameSelect"><b>遊戲選擇</b></label>
                                             <input id="modify-GameSelect" type="text" class="form-control" readonly name="modify-GameSelect" value="Baccarat">
                                         </div>
                                     </div>

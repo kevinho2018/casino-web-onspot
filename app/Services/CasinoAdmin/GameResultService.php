@@ -77,6 +77,11 @@ class GameResultService
 
         // 回應格式處理
         $responseString = $responseString . $guzzleResponse->getBody()->getContents();
+        $responseArray = [
+            'StatusCode' => $guzzleResponse->getStatusCode(),
+            'body' => $guzzleResponse->getBody(),
+            'content' => $guzzleResponse->getBody()->getContents()
+        ];
 
         return $responseString;
     }

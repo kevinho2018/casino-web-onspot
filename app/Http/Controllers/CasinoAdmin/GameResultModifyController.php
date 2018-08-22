@@ -126,7 +126,7 @@ class GameResultModifyController extends VoyagerBaseController
         // 1. Call Game Server API to cancel remote Database
         $responseString = $this->gameResultService->putCancel($request);
 
-        if ( !$this->isResultSuccess($responseString)) {
+        if ( !$this->isResponseSuccess($responseString)) {
             return redirect('admin/baccarathistory')->withErrors([$responseString]);
         }
 
@@ -147,7 +147,7 @@ class GameResultModifyController extends VoyagerBaseController
         // 1. Call Game Server API to modify remote Database
         $responseString = $this->gameResultService->putModify($request);
 
-        if ( !$this->isResultSuccess($responseString)) {
+        if ( !$this->isResponseSuccess($responseString)) {
             return redirect('admin/baccarathistory')->withErrors([$responseString]);
         }
 
@@ -161,7 +161,7 @@ class GameResultModifyController extends VoyagerBaseController
      * @param $responseString
      * @return bool
      */
-    private function isResultSuccess($responseString)
+    private function isResponseSuccess($responseString)
     {
         $temp = (explode(",", explode(":", $responseString)[2])[0]);
         $result = str_replace('"', '', $temp);
