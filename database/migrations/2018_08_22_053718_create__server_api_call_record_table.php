@@ -13,22 +13,19 @@ class CreateServerApiCallRecordTable extends Migration
      */
     public function up()
     {
-        Schema::create('ServerApiCallRecord', function (Blueprint $table) {
-            $table->increments('ServerApiId');
-            $table->string('IP');
-            $table->string('Url')
-                ->default('')
-                ->nullable();
-            $table->string('RequestParams')
-                ->default('')
-                ->nullable();
-            $table->boolean('ResponseStatus');
-            $table->unsignedSmallInteger('ResponseCode');
-            $table->string('ResponseFullContent')
-                ->default('')
-                ->nullable();
+        Schema::create('ApiCallRecord', function (Blueprint $table) {
+            $table->increments('RecordId');
+            $table->enum('Status', ['success', 'failed']);
+            $table->string('Ip', 40);
+            $table->text('RequestContent')
+                ->comment('請求內容');
+            $table->string('RequestUrl', 200)
+                ->comment('來源url');
+            $table->string('RequestApi', 100)
+                ->comment('請求操作 Api');
+            $table->text('ResponseContent')
+                ->comment('Api 回應內容');
             $table->dateTime('RequestTime');
-            $table->date('ResponseTime');
         });
     }
 
@@ -39,6 +36,6 @@ class CreateServerApiCallRecordTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ServerApiCallRecord');
+        Schema::dropIfExists('ApiCallRecord');
     }
 }
