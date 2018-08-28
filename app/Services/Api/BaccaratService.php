@@ -28,6 +28,8 @@ class BaccaratService
     }
 
     /**
+     * For Api Response Format
+     *
      * @param $input
      * @return BaccaratHistoryCollection|string
      */
@@ -37,7 +39,19 @@ class BaccaratService
         $searchEndTime = $input['endAt'];
         $status = $input['modifiedStatus'];
 
-        return new BaccaratHistoryCollection(BaccaratHistoryResource::collection($this->baccaratRepository->getBaccaratHistoryReport($searchStartTime,
+        return new BaccaratHistoryCollection(BaccaratHistoryResource::collection($this->getGameReport($searchStartTime,
             $searchEndTime, $status)));
+    }
+
+    /**
+     * @param $searchStartTime
+     * @param $searchEndTime
+     * @param $status
+     * @return \Illuminate\Support\Collection
+     */
+    public function getGameReport($searchStartTime, $searchEndTime, $status)
+    {
+
+        return $this->baccaratRepository->getBaccaratHistoryReport($searchStartTime, $searchEndTime, $status);
     }
 }

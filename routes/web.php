@@ -36,7 +36,7 @@ Route::group(['prefix' => 'admin'], function () {
         ->middleware('admin.user');
 
     // 查詢遊戲牌局頁面
-    Route::put('search-game-result-page', 'CasinoAdmin\GameResultController@searchResult')
+    Route::get('search-game-result-page', 'CasinoAdmin\GameResultController@searchResult')
         ->name('search-game-result-page')
         ->middleware('admin.user');
 });
