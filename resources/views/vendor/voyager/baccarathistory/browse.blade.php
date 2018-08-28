@@ -115,8 +115,8 @@
                     <div role="tabpanel" class="tab-pane fade" id="modify-game">
                         <form method="POST" action="{{ route('modify-game-result') }}" onsubmit="return confirm('＃提示：確定要修改牌局？(請確認牌型正確，牌局修改後不可再更改)')">
                             <!-- Method Field -->
-                            {{ method_field("PUT") }}
-                            <!-- CSRF TOKEN -->
+                        {{ method_field("PUT") }}
+                        <!-- CSRF TOKEN -->
                             {{ csrf_field() }}
                             <div class="panel panel-primary panel-bordered">
 
@@ -575,6 +575,7 @@
                         </form>
                     </div>
                 </div>
+
             </div><!-- .col-md-12 -->
         </div><!-- .row -->
     </div><!-- .page-content -->
