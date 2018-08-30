@@ -108,8 +108,8 @@ class BaccaratRepository
             ->where('Round', '=', $round)
             ->where('Run', '=', $run)
             ->update([
-                'BaccaratHistory.$ModifiedStatus' => $ModifiedStatus,
-                'BaccaratHistory.$ModifiedTime' => $ModifiedTime
+                'BaccaratHistory.ModifiedStatus' => $ModifiedStatus,
+                'BaccaratHistory.ModifiedTime' => $ModifiedTime
             ]);
     }
 }
