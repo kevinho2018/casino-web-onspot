@@ -126,12 +126,12 @@
                                             <td>{{ $listValue['WinSpot'] }}</td>
                                             <div>
                                                 @php
-                                                    $card1 = $listValue['Card1'];
-                                                    $card2 = $listValue['Card2'];
-                                                    $card3 = $listValue['Card3'];
-                                                    $card4 = $listValue['Card4'];
-                                                    $card5 = $listValue['Card5'];
-                                                    $card6 = $listValue['Card6'];
+                                                    $card1 = strtolower($listValue['Card1']);
+                                                    $card2 = strtolower($listValue['Card2']);
+                                                    $card3 = strtolower($listValue['Card3']);
+                                                    $card4 = strtolower($listValue['Card4']);
+                                                    $card5 = strtolower($listValue['Card5']);
+                                                    $card6 = strtolower($listValue['Card6']);
                                                 @endphp
                                                 <div>
                                                     <td>
