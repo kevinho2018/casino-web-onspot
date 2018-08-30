@@ -143,18 +143,16 @@ class GameResultModifyController extends VoyagerBaseController
     public function putModify(GameResultModifyRequest $request)
     {
         Voyager::canOrFail('browse_BaccaratHistory');
-        /*
+
         // 1. Call Game Server API to modify remote Database
         $responseString = $this->gameResultService->putModify($request);
 
         if ( !$this->isResponseSuccess($responseString)) {
             return redirect('admin/baccarathistory')->with('Message', $responseString);//->withErrors([$responseString]);
-        }*/
+        }
 
         // 2. Modify On-spot Database
         $this->gameResultService->modifyBaccaratHistory($request);
-
-        $responseString = "re";
 
         return redirect('admin/baccarathistory')->with('Message', $responseString);
     }
