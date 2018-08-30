@@ -37,7 +37,7 @@ class GameResultController extends VoyagerBaseController
 
         $gameReport = null;
 
-        return view('casinoAdmin.gameResult', compact('gameReport'));
+        return view('CasinoAdmin.gameResult', compact('gameReport'));
     }
 
     /**
@@ -52,6 +52,6 @@ class GameResultController extends VoyagerBaseController
 
         $gameReport = $this->baccaratService->getGameReport($searchStartTime, $searchEndTime, $status)->toArray();
 
-        return view('casinoAdmin.gameResult', compact('gameReport'));
+        return view('CasinoAdmin.gameResult', compact('gameReport'));
     }
 }
