@@ -39,14 +39,15 @@ class GameResultService
      */
     public function modifyBaccaratHistory($request)
     {
-        $modifyStatus = $request->get('cancel-ModifiedStatus');
-        $cancelStatus = $request->get('modify-ModifiedStatus');
+        $this->baccaratRepository->modifyBaccaratHistory($request);
+    }
 
-        if (isset($modifyStatus) && $modifyStatus = "Modified") {
-            $this->baccaratRepository->modifyBaccaratHistory($request);
-        } elseif (isset($cancelStatus) && $cancelStatus == "Canceled") {
-            $this->baccaratRepository->cancelBaccaratHistory($request);
-        }
+    /**
+     * @param $request
+     */
+    public function cancelBaccaratHistory($request)
+    {
+        $this->baccaratRepository->cancelBaccaratHistory($request);
     }
 
     /**

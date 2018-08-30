@@ -34,9 +34,13 @@
                 <br>
 
                 @if (isset($responseString))
-                <div class="alert alert-warning">
-                    <strong>Info!</strong> {{ $responseString }}.
-                </div>
+                    <div class="alert alert-warning">
+                        <strong>Info!</strong> {{ $responseString }}.
+                    </div>
+                @elseif (session('Message'))
+                    <div class="alert alert-info">
+                        <strong>Info!</strong> 改單/取消單成功！
+                    </div>
                 @endif
 
                 @if (count($errors))

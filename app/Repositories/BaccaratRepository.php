@@ -57,6 +57,10 @@ class BaccaratRepository
      */
     public function modifyBaccaratHistory($request)
     {
+        $tableId = $request->get('modify-TableId');
+        $round = $request->get('modify-GameRound');
+        $run = $request->get('modify-GameRun');
+
         $Card1 = $request->get('player-card-1');
         $Card2 = $request->get('banker-card-1');
         $Card3 = $request->get('player-card-2');
@@ -71,16 +75,19 @@ class BaccaratRepository
         $WinSpot = $this->countGameResultService->getWinnerResult();
 
         $this->baccaratHistory
+            ->where('TableId', '=', $tableId)
+            ->where('Round', '=', $round)
+            ->where('Run', '=', $run)
             ->update([
-                'BaccaratHistory.Card1' => $Card1,
-                'BaccaratHistory.Card2' => $Card2,
-                'BaccaratHistory.Card3' => $Card3,
-                'BaccaratHistory.Card4' => $Card4,
-                'BaccaratHistory.Card5' => $Card5,
-                'BaccaratHistory.Card6' => $Card6,
-                'BaccaratHistory.$ModifiedStatus' => $ModifiedStatus,
-                'BaccaratHistory.$ModifiedTime' => $ModifiedTime,
-                'BaccaratHistory.$WinSpot' => $WinSpot
+                'Card1' => $Card1,
+                'Card2' => $Card2,
+                'Card3' => $Card3,
+                'Card4' => $Card4,
+                'Card5' => $Card5,
+                'Card6' => $Card6,
+                'ModifiedStatus' => $ModifiedStatus,
+                'ModifiedTime' => $ModifiedTime,
+                'WinSpot' => $WinSpot
             ]);
     }
 
@@ -89,10 +96,17 @@ class BaccaratRepository
      */
     public function cancelBaccaratHistory($request)
     {
-        $ModifiedStatus = $request->get('modify-ModifiedStatus');
+        $tableId = $request->get('cancel-TableId');
+        $round = $request->get('cancel-GameRound');
+        $run = $request->get('cancel-GameRun');
+
+        $ModifiedStatus = $request->get('cancel-ModifiedStatus');
         $ModifiedTime = Carbon::now('Asia/Taipei');
 
         $this->baccaratHistory
+            ->where('TableId', '=', $tableId)
+            ->where('Round', '=', $round)
+            ->where('Run', '=', $run)
             ->update([
                 'BaccaratHistory.$ModifiedStatus' => $ModifiedStatus,
                 'BaccaratHistory.$ModifiedTime' => $ModifiedTime

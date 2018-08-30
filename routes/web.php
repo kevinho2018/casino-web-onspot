@@ -30,11 +30,13 @@ Route::group(['prefix' => 'admin'], function () {
         ->middleware('admin.user');
 
     // Call Game Server 取消牌局耶果
+    // TODO 如果該局沒有注單會噴錯
     Route::put('cancel-game-result', 'CasinoAdmin\GameResultModifyController@putCancel')
         ->name('cancel-game-result')
         ->middleware('admin.user');
 
     // Call Game Server 修改牌局結果
+    // TODO 如果該局沒有注單會噴錯
     Route::put('modify-game-result', 'CasinoAdmin\GameResultModifyController@putModify')
         ->name('modify-game-result')
         ->middleware('admin.user');
