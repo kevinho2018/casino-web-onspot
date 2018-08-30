@@ -51,7 +51,6 @@ class BaccaratService
      */
     public function getGameReport($searchStartTime, $searchEndTime, $status)
     {
-
         return $this->baccaratRepository->getBaccaratHistoryReport($searchStartTime, $searchEndTime, $status);
     }
 }

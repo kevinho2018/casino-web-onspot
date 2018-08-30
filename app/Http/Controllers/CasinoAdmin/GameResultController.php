@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers\CasinoAdmin;
 
+use Carbon\Carbon;
 use TCG\Voyager\Http\Controllers\VoyagerBaseController;
 use Illuminate\Http\Request;
 use TCG\Voyager\Facades\Voyager;
@@ -25,25 +26,32 @@ class GameResultController extends VoyagerBaseController
     ) {
         $this->baccaratService = $baccaratService;
     }
+
     /**
      * @param Request $request
-     * @return int
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function searchResult(Request $request)
     {
         Voyager::canOrFail('browse_admin');
 
-        return view('casinoAdmin.gameResult');
+        $gameReport = null;
+
+        return view('casinoAdmin.gameResult', compact('gameReport'));
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Support\Collection
+     */
     public function getGameResult(Request $request)
     {
-        $searchStartTime = $request->get('startTime');
-        $searchEndTime = $request->get('EndTime');
-        $status = $request->get('status');
+        $status = $request->get('search-ModifiedStatus');
+        $searchStartTime = ($request->get('startAt') == null) ? Carbon::now()->startOfDay()->subDay()->toDateTimeString() : $request->get('startAt');
+        $searchEndTime = ($request->get('endAt') == null) ? Carbon::now()->endOfDay()->toDateTimeString() : $request->get('endAt');
 
-        return $this->baccaratService->getGameReport($searchStartTime, $searchEndTime, $status);
+        $gameReport = $this->baccaratService->getGameReport($searchStartTime, $searchEndTime, $status)->toArray();
+
+        return view('casinoAdmin.gameResult', compact('gameReport'));
     }
-
-
 }

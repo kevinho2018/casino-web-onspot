@@ -20,12 +20,16 @@ Route::group(['prefix' => 'admin'], function () {
 
     // Override Route
 
+    // Override Voyager Login Method
+    Route::get('login', ['uses' => 'VoyagerAuthController@login', 'as' => 'login']);
+    Route::post('login', ['uses' => 'VoyagerAuthController@postLogin', 'as' => 'postlogin']);
+
     // 遊戲牌局改單取消頁面 override baccaratHistory
     Route::get('baccaratHistory-page', 'CasinoAdmin\GameResultModifyController@index')
         ->name('baccaratHistory-page')
         ->middleware('admin.user');
 
-    //  Call Game Server 取消牌局耶果
+    // Call Game Server 取消牌局耶果
     Route::put('cancel-game-result', 'CasinoAdmin\GameResultModifyController@putCancel')
         ->name('cancel-game-result')
         ->middleware('admin.user');
@@ -38,5 +42,10 @@ Route::group(['prefix' => 'admin'], function () {
     // 查詢遊戲牌局頁面
     Route::get('search-game-result-page', 'CasinoAdmin\GameResultController@searchResult')
         ->name('search-game-result-page')
+        ->middleware('admin.user');
+
+    // 查詢遊戲牌局
+    Route::get('search-game-result', 'CasinoAdmin\GameResultController@getGameResult')
+        ->name('search-game-result')
         ->middleware('admin.user');
 });
