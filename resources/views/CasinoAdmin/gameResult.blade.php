@@ -11,6 +11,8 @@
 @stop
 
 @section('content')
+    @inject('gameResultPresenter', 'App\Presenters\GameResultPresenter')
+
     <div class="page-content container-fluid" id="gameResultModifyPage">
         <div class="row">
             <div class="col-md-12">
@@ -57,7 +59,6 @@
                             </div>
 
                             <div class="row clearfix">
-
                                 <div class="col-md-3 form-group">
                                     <label class="" for="search-ModifiedStatus"><b>牌局狀態</b></label>
                                     <select class="form-control" id="search-ModifiedStatus" name="search-ModifiedStatus">
@@ -66,17 +67,14 @@
                                         <option value="canceled">事後取消 Canceled</option>
                                     </select>
                                 </div>
-
                                 <div class="col-md-3 form-group">
                                     <label class="" for="search-GameSelect"><b>遊戲選擇</b></label>
                                     <input id="search-GameSelect" type="text" class="form-control" readonly name="search-GameSelect" value="Baccarat">
                                 </div>
-
                                 <div class="col-md-3 form-group">
                                     <label for="startAt"><b>查詢開始時間</b></label>
                                     <input type="date" class="form-control" data-name="startAt"name="startAt" id="startAt">
                                 </div>
-
                                 <div class="col-md-3 form-group">
                                     <label for="endAt"><b>查詢結束時間</b></label>
                                     <input type="date" class="form-control" data-name="endAt" name="endAt" id="endAt">
@@ -124,40 +122,14 @@
                                             <td>{{ $listValue['Round'] }}</td>
                                             <td>{{ $listValue['Run'] }}</td>
                                             <td>{{ $listValue['WinSpot'] }}</td>
-                                            <div>
-                                                @php
-                                                    $card1 = lcfirst($listValue['Card1']);
-                                                    $card2 = lcfirst($listValue['Card2']);
-                                                    $card3 = lcfirst($listValue['Card3']);
-                                                    $card4 = lcfirst($listValue['Card4']);
-                                                    $card5 = lcfirst($listValue['Card5']);
-                                                    $card6 = lcfirst($listValue['Card6']);
-                                                @endphp
-                                                <div>
-                                                    <td>
-                                                        @if (! is_null($card5) && ($card5 != ''))
-                                                            <span class="baccaratResultCard thirdCard"><img src='{{ asset("images/pokercard/$card5.png") }}'></span>
-                                                        @else
-                                                            {{ $listValue['Card5'] }}
-                                                        @endif
-                                                    </td>
-                                                    <td><span class="baccaratResultCard"><img src='{{ asset("images/pokercard/$card3.png") }}'></span></td>
-                                                    <td><span class="baccaratResultCard"><img src='{{ asset("images/pokercard/$card1.png") }}'></span></td>
-                                                    <td>
-                                                        @if (! is_null($card6) && ($card6 != ''))
-                                                            <span class="baccaratResultCard thirdCard"><img src='{{ asset("images/pokercard/$card6.png") }}'></span>
-                                                        @else
-                                                            {{ $listValue['Card6'] }}
-                                                        @endif
-                                                    </td>
-                                                    <td><span class="baccaratResultCard"><img src='{{ asset("images/pokercard/$card4.png") }}'></span></td>
-                                                    <td><span class="baccaratResultCard"><img src='{{ asset("images/pokercard/$card2.png") }}'></span></td>
-                                                </div>
-                                            </div>
+                                            <td>{!! $gameResultPresenter->showCard5Card6($listValue['Card5']) !!}</td>
+                                            <td><span class="baccaratResultCard">{!! $gameResultPresenter->showCardImage($listValue['Card3']) !!}</span></td>
+                                            <td><span class="baccaratResultCard">{!! $gameResultPresenter->showCardImage($listValue['Card1']) !!}</span></td>
+                                            <td>{!! $gameResultPresenter->showCard5Card6($listValue['Card6']) !!}</td>
+                                            <td><span class="baccaratResultCard">{!! $gameResultPresenter->showCardImage($listValue['Card4']) !!}</span></td>
+                                            <td><span class="baccaratResultCard">{!! $gameResultPresenter->showCardImage($listValue['Card2']) !!}</span></td>
                                             <td>{{ $listValue['ModifiedStatus'] }}</td>
-                                            <td>
-                                                <a target="_blank" href="http://video.livecasino168.com/<?= ucwords($listValue['TableId']) ?>/<?= $listValue['Round'] ?>/<?= $listValue['Round'] ?>-<?= $listValue['Run'] ?>.mp4 ">Video</a>
-                                            </td>
+                                            <td><a target='_blank' href={!! $gameResultPresenter->showVideoDownloadLink($listValue) !!}>Video</a></td>
                                             <td>{{ $listValue['ModifiedTime'] }}</td>
                                             <td>{{ $listValue['CreateTime'] }}</td>
                                     @endforeach
@@ -181,23 +153,5 @@
 
 @section('page-js-script')
     <!-- Data picker -->
-
-    <!-- 日期選單
-    <script>
-        $( function() {
-            $('#search-start-time').datepicker();
-        });
-
-        $('#endAt').datepicker({
-            todayBtn: "linked",
-            keyboardNavigation: false,
-            forceParse: false,
-            calendarWeeks: true,
-            autoclose: true,
-            format: 'yyyy-mm-dd',
-            todayHighlight: true,
-        });
-
-    </script>-->
 
 @stop

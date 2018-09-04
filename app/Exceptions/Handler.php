@@ -80,8 +80,6 @@ class Handler extends ExceptionHandler
             $errorJson['error']['message'] = vsprintf($error['message'], $request->method());
         }
 
-        //TODO 紀錄是哪個後台使用者的帳號修改、取消牌局的
-
         $headers = ['Content-Type' => 'application/json; charset=utf-8'];
 
         return response()->json($errorJson, 200, $headers, JSON_UNESCAPED_UNICODE);

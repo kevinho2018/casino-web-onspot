@@ -124,13 +124,16 @@ class GameResultModifyController extends VoyagerBaseController
         Voyager::canOrFail('browse_BaccaratHistory');
 
         // 1. Call Game Server API to cancel remote Database
+        // TODO 如果該局沒有注單會噴錯 => 先擋掉？
+        // TODO 已修改、已取消的也會噴錯，先擋掉？
+        // TODO 後續應該是casino-wep開一支api可以針對沒有注單的牌局改牌型
         $responseString = $this->gameResultService->putCancel($request);
 
         if ( !$this->isResponseSuccess($responseString)) {
             return redirect('admin/baccarathistory')->withErrors([$responseString]);
         }
 
-        // 2. Modify On-spot Database
+        // 2. Modify Local On-spot Database
         $this->gameResultService->cancelBaccaratHistory($request);
 
         return redirect('admin/baccarathistory')->with('Message', $responseString);
@@ -145,13 +148,16 @@ class GameResultModifyController extends VoyagerBaseController
         Voyager::canOrFail('browse_BaccaratHistory');
 
         // 1. Call Game Server API to modify remote Database
+        // TODO 如果該局沒有注單會噴錯，先擋掉？
+        // TODO 已修改、已取消的也會噴錯，先擋掉？
+        // TODO 後續應該是casino-wep開一支api可以針對沒有注單的牌局改牌型
         $responseString = $this->gameResultService->putModify($request);
 
         if ( !$this->isResponseSuccess($responseString)) {
-            return redirect('admin/baccarathistory')->with('Message', $responseString);//->withErrors([$responseString]);
+            return redirect('admin/baccarathistory')->withErrors([$responseString]);
         }
 
-        // 2. Modify On-spot Database
+        // 2. Modify Local On-spot Database
         $this->gameResultService->modifyBaccaratHistory($request);
 
         return redirect('admin/baccarathistory')->with('Message', $responseString);
