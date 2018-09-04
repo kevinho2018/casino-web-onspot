@@ -50,4 +50,9 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('search-game-result', 'CasinoAdmin\GameResultController@getGameResult')
         ->name('search-game-result')
         ->middleware('admin.user');
+
+    // KeyPad控制頁面
+    Route::get('keypad-console-page', 'CasinoAdmin\KeypadController@keyPadConsole')
+        ->name('keypad-console-page')
+        ->middleware('admin.user');
 });
