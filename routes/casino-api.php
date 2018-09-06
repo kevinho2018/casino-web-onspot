@@ -24,10 +24,12 @@ Route::group(
         'middleware' => ['fw-block-blacklisted'], // App\Http\Kernel.php
     ],
     function() {
+        /*
         Route::get('coming/soon', function()
         {
             return "We are about to launch, please come back in a few days.";
         });
+        */
 
         // 百家樂 API -> uri-prefix = 'baccarat'
         // TODO 測試完成後 -> 補上白名單限制 ['fw-only-whitelisted']

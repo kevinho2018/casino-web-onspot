@@ -11,9 +11,11 @@
 |
 */
 
+/*
 Route::get('/welcome', function () {
     return view('welcome');
 });
+*/
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
