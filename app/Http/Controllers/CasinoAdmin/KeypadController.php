@@ -25,6 +25,6 @@ class KeypadController extends VoyagerBaseController
         // TODO 1. 需實作 呼叫KeyServer Api去開啟關閉維護
         // TODO 2. 需實作 拿取即時維護狀態 在維護頁面顯示維護狀態
 
-        return view('CasinoAdmin.keyPadConsole');
+        return view('CasinoAdmin.phpinfo');
     }
 }
