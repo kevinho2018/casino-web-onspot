@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use DB;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 class Handler extends ExceptionHandler
@@ -48,6 +49,11 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof NotFoundHttpException) {
+            dd("notfound");
+            return response()->view('errors.404');
+        }
+
         // 如果是casino-api的request
         if ($request->is('casino-api/*'))
         {

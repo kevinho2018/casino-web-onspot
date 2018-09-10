@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\CasinoAdmin;
 
+use App\Http\Controllers\Api\ApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -53,6 +54,9 @@ class GameResultModifyController extends VoyagerBaseController
         $responseString = $this->gameResultService->putCancel($request);
 
         if ( !$this->isResponseSuccess($responseString)) {
+            // $request
+            // $responseString 錯誤訊息
+
             return redirect('admin/baccarathistory')->withErrors([$responseString]);
         }
 
