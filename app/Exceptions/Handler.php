@@ -2,6 +2,8 @@
 
 namespace App\Exceptions;
 
+use Carbon\Carbon;
+use DB;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
@@ -81,6 +83,17 @@ class Handler extends ExceptionHandler
         }
 
         $headers = ['Content-Type' => 'application/json; charset=utf-8'];
+
+        DB::table('ApiCallRecord')->insert([
+            'Status' => 'failed',
+            'Ip' => $request->ip(),
+            'RequestMethod' => $request->method(),
+            'RequestContent' => json_encode($request->all(), JSON_UNESCAPED_UNICODE),
+            'RequestUrl' => $request->url(),
+            'RequestApi' => $request->path(),
+            'ResponseContent' => json_encode($errorJson),
+            'RequestTime' => Carbon::now(),
+        ]);
 
         return response()->json($errorJson, 200, $headers, JSON_UNESCAPED_UNICODE);
     }

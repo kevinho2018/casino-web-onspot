@@ -9,13 +9,14 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Services\Api\VideoService;
 
 /**
+ * Class VideoController
  * @property VideoService videoService
+ * @package App\Http\Controllers\Api
  */
-class VideoController extends Controller
+class VideoController extends ApiController
 {
     /**
      * VideoController constructor.

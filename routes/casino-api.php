@@ -44,7 +44,7 @@ Route::group(
                 ->middleware(['casino-api.verify:tableId,round,run'])
                 ->name('videos');
 
-            // 查詢帳號權限
+            // 查詢帳號權限 not used
             Route::get('account/accountValidate', 'AccountController@getLoginValidation')
                 ->name('accountValidate');
         });

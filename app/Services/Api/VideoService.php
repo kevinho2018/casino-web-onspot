@@ -29,7 +29,7 @@ class VideoService
 
     /**
      * @param $input
-     * @return VideoRecordCollection|\Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection|static[]
+     * @return string
      */
     public function getVideoReport($input)
     {
@@ -37,6 +37,9 @@ class VideoService
         $round = $input['round'];
         $run = $input['run'];
 
-        return new VideoRecordCollection(VideoRecordResource::collection($this->videoRepository->getVideoReport($tableId, $round, $run)));
+        $videoLink = 'http://video.livecasino168.com/' . $tableId . '/' . $round . '/' . $round .'-' . $run . ".mp4";
+
+        return $videoLink;
+        //return new VideoRecordCollection(VideoRecordResource::collection($this->videoRepository->getVideoReport($tableId, $round, $run)));
     }
 }
