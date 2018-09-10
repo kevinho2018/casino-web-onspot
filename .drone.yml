@@ -11,3 +11,4 @@ pipeline:
       - composer install --prefer-dist
       - php artisan key:generate
       - ./vendor/bin/phpunit
+      
