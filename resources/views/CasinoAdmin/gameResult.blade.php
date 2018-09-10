@@ -122,10 +122,10 @@
                                             <td>{{ $listValue['Round'] }}</td>
                                             <td>{{ $listValue['Run'] }}</td>
                                             <td>{{ $listValue['WinSpot'] }}</td>
-                                            <td>{!! $gameResultPresenter->showCard5Card6($listValue['Card5']) !!}</td>
+                                            <td><span class="baccaratResultCard thirdCard" >{!! $gameResultPresenter->showCard5Card6($listValue['Card5']) !!}</span></td>
                                             <td><span class="baccaratResultCard">{!! $gameResultPresenter->showCardImage($listValue['Card3']) !!}</span></td>
                                             <td><span class="baccaratResultCard">{!! $gameResultPresenter->showCardImage($listValue['Card1']) !!}</span></td>
-                                            <td>{!! $gameResultPresenter->showCard5Card6($listValue['Card6']) !!}</td>
+                                            <td><span class="baccaratResultCard thirdCard" >{!! $gameResultPresenter->showCard5Card6($listValue['Card6']) !!}</span></td>
                                             <td><span class="baccaratResultCard">{!! $gameResultPresenter->showCardImage($listValue['Card4']) !!}</span></td>
                                             <td><span class="baccaratResultCard">{!! $gameResultPresenter->showCardImage($listValue['Card2']) !!}</span></td>
                                             <td>{{ $listValue['ModifiedStatus'] }}</td>

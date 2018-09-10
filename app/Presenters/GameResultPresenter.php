@@ -25,8 +25,7 @@ class GameResultPresenter
             $card = lcfirst($card);
             $getImage = asset('images/pokercard/' . $card . '.png');
 
-            return '<span class="baccaratResultCard thirdCard" >'
-                . "<img src = " . $getImage . "></span >";
+            return "<img src = " . $getImage . "></span >";
         } else {
             return null;
         }
