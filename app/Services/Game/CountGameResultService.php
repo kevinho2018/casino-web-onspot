@@ -46,7 +46,11 @@ class CountGameResultService
         $this->result['banker'] %= 10;
     }
 
-    private static function card2Point($code)
+    /**
+     * @param array $code
+     * @return int
+     */
+    private static function card2Point(array $code)
     {
         if (!in_array($code, BaccaratGameRuleService::$POKER_LIST, true)) {
             return 0;
@@ -71,6 +75,9 @@ class CountGameResultService
         }
     }
 
+    /**
+     * @return string
+     */
     public function getWinnerResult()
     {
         if ($this->result['banker'] > $this->result['player']) {
@@ -110,125 +117,5 @@ class CountGameResultService
     public function getPlayerFirstTwoCardPoint()
     {
         return $this->result['playerFirstTwoCard'];
-    }
-
-    /**
-     * 判斷是否為天牌
-     * @param $playerFirstTwoCard
-     * @param $bankerFirstTwoCard
-     * @return bool
-     */
-    private function isFirstTwoCardNatural($playerFirstTwoCard, $bankerFirstTwoCard)
-    {
-        return ($playerFirstTwoCard > 7 || $bankerFirstTwoCard > 7);
-    }
-
-    /**
-     * 判斷玩家是否需要補牌
-     * @param $playerFirstTwoCard
-     * @return bool
-     */
-    private function isPlayerDealNeed($playerFirstTwoCard)
-    {
-        return $playerFirstTwoCard < 6;
-    }
-
-    /**
-     * 判斷莊家是否要補牌
-     * @param $bankerFirstTwoCard
-     * @param $Card5
-     * @return bool
-     */
-    private function isBankerDealNeeded($bankerFirstTwoCard, $Card5)
-    {
-        if ($bankerFirstTwoCard <= 2) {
-            return true;
-        }
-
-        $player3 = "";
-
-        if ($Card5 != null) {
-            $player3 = $Card5{1};
-        }
-
-        if ($bankerFirstTwoCard == 3) {
-            return $player3 != "8";
-        } elseif ($bankerFirstTwoCard == 4) {
-            return ($player3 != "1" &&
-                $player3 != "8" &&
-                $player3 != "9" &&
-                $player3 != "0" &&
-                $player3 != "K" &&
-                $player3 != "Q" &&
-                $player3 != "J");
-        } elseif ($bankerFirstTwoCard == 5) {
-            return ($player3 != "1" &&
-                $player3 != "2" &&
-                $player3 != "3" &&
-                $player3 != "8" &&
-                $player3 != "9" &&
-                $player3 != "0" &&
-                $player3 != "K" &&
-                $player3 != "Q" &&
-                $player3 != "J");
-        } elseif ($bankerFirstTwoCard == 6) {
-            return ($player3 == "6" || $player3 == "7");
-        }
-        return false;
-    }
-
-    /**
-     * 判斷牌局前四張牌是否缺牌
-     * @param $detailValue
-     * @return bool
-     */
-    private function isFirstFourCardLoss($detailValue)
-    {
-        return ($detailValue['Card1'] == null
-            || $detailValue['Card2'] == null
-            || $detailValue['Card3'] == null
-            || $detailValue['Card4'] == null) ? true : false;
-    }
-
-    /**
-     * 判斷牌局是否符合補牌規則
-     * @param $detailValue
-     * @return bool
-     */
-    public function isDealCorrect($detailValue)
-    {
-        if ($this->isFirstFourCardLoss($detailValue)) {
-            return false;
-        }
-
-        $this->StoreGameResult($detailValue['Card2'], $detailValue['Card4'], $detailValue['Card6'], $detailValue['Card1'], $detailValue['Card3'], $detailValue['Card5']);
-        $playerFirstTwoCard = $this->getPlayerFirstTwoCardPoint();
-        $bankerFirstTwoCard = $this->getBankerFirstTwoCardPoint();
-
-        if (!$this->isFirstTwoCardNatural($playerFirstTwoCard, $bankerFirstTwoCard)
-            && $this->isPlayerDealNeed($playerFirstTwoCard)
-            && $detailValue['Card5'] == null
-        ) {
-            return false; // 1. 該補牌未補牌 // 1.1不為天牌、閒家需補牌、但是未補牌
-        } elseif (!$this->isFirstTwoCardNatural($playerFirstTwoCard, $bankerFirstTwoCard)
-            && $this->isBankerDealNeeded($bankerFirstTwoCard, $detailValue['Card5'])
-            && $detailValue['Card6'] == null
-        ) {
-            return false; // 1.2不為天牌、莊家需補牌、但是未補牌
-        } elseif ($this->isFirstTwoCardNatural($playerFirstTwoCard, $bankerFirstTwoCard)
-            && ($detailValue['Card5'] != null || $detailValue['Card6'] != null)
-        ) {
-            return false; // 2. 不該補牌卻補牌 // 2.1天牌，但是閒家或莊家補牌
-        } elseif (!$this->isPlayerDealNeed($playerFirstTwoCard)
-            && $detailValue['Card5'] != null
-        ) {
-            return false; // 2.2閒家不需要補牌，卻補牌
-        } elseif (!$this->isBankerDealNeeded($bankerFirstTwoCard, $detailValue['Card5'])
-            && $detailValue['Card6'] != null
-        ) {
-            return false; // 2.3莊家不需要補牌，卻補牌
-        }
-
-        return true; // 符合補牌規則名單
     }
 }

@@ -31,7 +31,7 @@ class VideoService
      * @param $input
      * @return string
      */
-    public function getVideoReport($input)
+    public function getVideoReport(array $input)
     {
         $tableId = $input['tableId'];
         $round = $input['round'];
@@ -40,6 +40,5 @@ class VideoService
         $videoLink = 'http://video.livecasino168.com/' . $tableId . '/' . $round . '/' . $round .'-' . $run . ".mp4";
 
         return $videoLink;
-        //return new VideoRecordCollection(VideoRecordResource::collection($this->videoRepository->getVideoReport($tableId, $round, $run)));
     }
 }

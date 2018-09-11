@@ -8,13 +8,13 @@
 
 namespace App\Repositories;
 
+use App\Http\Requests\GameResultCancelRequest;
+use App\Http\Requests\GameResultModifyRequest;
 use App\Models\BaccaratHistory\BaccaratHistory;
 use Carbon\Carbon;
-use App\Services\Game\CountGameResultService;
 
 /**
  * Class BaccaratRepository
- * @property CountGameResultService countGameResultService
  * @package App\Repositories
  */
 class BaccaratRepository
@@ -27,14 +27,11 @@ class BaccaratRepository
     /**
      * BaccaratRepository constructor.
      * @param BaccaratHistory $baccaratHistory
-     * @param CountGameResultService $countGameResultService
      */
     public function __construct(
-        BaccaratHistory $baccaratHistory,
-        CountGameResultService $countGameResultService
+        BaccaratHistory $baccaratHistory
     ) {
         $this->baccaratHistory = $baccaratHistory;
-        $this->countGameResultService = $countGameResultService;
     }
 
     /**
@@ -54,62 +51,43 @@ class BaccaratRepository
 
     /**
      * @param $request
+     * @param $WinSpot
      */
-    public function modifyBaccaratHistory($request)
+    public function modifyBaccaratHistory(GameResultModifyRequest $request, string $WinSpot)
     {
-        $tableId = $request->get('modify-TableId');
-        $round = $request->get('modify-GameRound');
-        $run = $request->get('modify-GameRun');
-
-        $Card1 = $request->get('player-card-1');
-        $Card2 = $request->get('banker-card-1');
-        $Card3 = $request->get('player-card-2');
-        $Card4 = $request->get('banker-card-2');
-        $Card5 = $request->get('player-card-3');
-        $Card6 = $request->get('banker-card-3');
-        $ModifiedStatus = $request->get('modify-ModifiedStatus');
-        $ModifiedTime = Carbon::now('Asia/Taipei');
-
-        // Count who is Winner
-        $this->countGameResultService->StoreGameResult($Card1, $Card2, $Card3, $Card4, $Card5, $Card6);
-        $WinSpot = $this->countGameResultService->getWinnerResult();
+        $timeNow = Carbon::now('Asia/Taipei');
 
         $this->baccaratHistory
-            ->where('TableId', '=', $tableId)
-            ->where('Round', '=', $round)
-            ->where('Run', '=', $run)
+            ->where('TableId', '=', $request->get('modify-TableId'))
+            ->where('Round', '=', $request->get('modify-GameRound'))
+            ->where('Run', '=', $request->get('modify-GameRun'))
             ->update([
-                'Card1' => $Card1,
-                'Card2' => $Card2,
-                'Card3' => $Card3,
-                'Card4' => $Card4,
-                'Card5' => $Card5,
-                'Card6' => $Card6,
-                'ModifiedStatus' => $ModifiedStatus,
-                'ModifiedTime' => $ModifiedTime,
+                'Card1' => $request->get('player-card-1'),
+                'Card2' => $request->get('banker-card-1'),
+                'Card3' => $request->get('player-card-2'),
+                'Card4' => $request->get('banker-card-2'),
+                'Card5' => $request->get('player-card-3'),
+                'Card6' => $request->get('banker-card-3'),
+                'ModifiedStatus' => $request->get('modify-ModifiedStatus'),
+                'ModifiedTime' => $timeNow,
                 'WinSpot' => $WinSpot
             ]);
     }
 
     /**
-     * @param $request
+     * @param GameResultCancelRequest $request
      */
-    public function cancelBaccaratHistory($request)
+    public function cancelBaccaratHistory(GameResultCancelRequest $request)
     {
-        $tableId = $request->get('cancel-TableId');
-        $round = $request->get('cancel-GameRound');
-        $run = $request->get('cancel-GameRun');
-
-        $ModifiedStatus = $request->get('cancel-ModifiedStatus');
-        $ModifiedTime = Carbon::now('Asia/Taipei');
+        $timeNow = Carbon::now('Asia/Taipei');
 
         $this->baccaratHistory
-            ->where('TableId', '=', $tableId)
-            ->where('Round', '=', $round)
-            ->where('Run', '=', $run)
+            ->where('TableId', '=', $request->get('cancel-TableId'))
+            ->where('Round', '=', $request->get('cancel-GameRound'))
+            ->where('Run', '=', $request->get('cancel-GameRun'))
             ->update([
-                'BaccaratHistory.ModifiedStatus' => $ModifiedStatus,
-                'BaccaratHistory.ModifiedTime' => $ModifiedTime
+                'BaccaratHistory.ModifiedStatus' => $request->get('cancel-ModifiedStatus'),
+                'BaccaratHistory.ModifiedTime' => $timeNow
             ]);
     }
 }

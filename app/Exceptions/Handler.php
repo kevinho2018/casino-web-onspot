@@ -50,7 +50,6 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
         if ($exception instanceof NotFoundHttpException) {
-            dd("notfound");
             return response()->view('errors.404');
         }
 

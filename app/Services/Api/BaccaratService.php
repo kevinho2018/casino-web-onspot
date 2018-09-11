@@ -11,6 +11,7 @@ namespace App\Services\Api;
 use App\Http\Resources\BaccaratHistoryResource as BaccaratHistoryResource;
 use App\Http\Resources\BaccaratHistoryCollection as BaccaratHistoryCollection;
 use App\Repositories\BaccaratRepository;
+use Illuminate\Http\Request;
 
 /**
  * @property BaccaratRepository baccaratRepository
@@ -28,12 +29,10 @@ class BaccaratService
     }
 
     /**
-     * For Api Response Format
-     *
-     * @param $input
-     * @return BaccaratHistoryCollection|string
+     * @param array $input
+     * @return BaccaratHistoryCollection
      */
-    public function getBaccaratHistoryReport($input)
+    public function getBaccaratHistoryReport(array $input)
     {
         $searchStartTime = $input['startAt'];
         $searchEndTime = $input['endAt'];

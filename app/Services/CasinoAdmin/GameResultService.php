@@ -8,18 +8,22 @@
 
 namespace App\Services\CasinoAdmin;
 
+use App\Http\Requests\GameResultCancelRequest;
+use App\Http\Requests\GameResultModifyRequest;
 use GuzzleHttp\Client;
 use App\Repositories\BaccaratRepository;
+use App\Services\Game\CountGameResultService;
 
-const GAME_SERVER_HOST_TESTING = "http://192.168.119.72:8881/";
+const GAME_SERVER_HOST_TESTING = 'http://192.168.119.72:8881/';
 
-const GAME_SERVER_HOST_STAGE = "http://52.79.50.1:8881/";
+const GAME_SERVER_HOST_STAGE = 'http://52.79.50.1:8881/';
 
-const GAME_SERVER_HOST_PRODUCTION = "http://54.65.37.189:8881/";
+const GAME_SERVER_HOST_PRODUCTION = 'http://54.65.37.189:8881/';
 
 /**
  * Class GameResultService
  * @property BaccaratRepository baccaratRepository
+ * @property CountGameResultService countGameResultService
  * @package App\Services\CasinoAdmin
  */
 class GameResultService
@@ -27,25 +31,32 @@ class GameResultService
     /**
      * GameResultService constructor.
      * @param BaccaratRepository $baccaratRepository
+     * @param CountGameResultService $countGameResultService
      */
     public function __construct(
-        BaccaratRepository $baccaratRepository
+        BaccaratRepository $baccaratRepository,
+        CountGameResultService $countGameResultService
     ) {
         $this->baccaratRepository = $baccaratRepository;
+        $this->countGameResultService = $countGameResultService;
     }
 
     /**
      * @param $request
      */
-    public function modifyBaccaratHistory($request)
+    public function modifyBaccaratHistory(GameResultModifyRequest $request)
     {
-        $this->baccaratRepository->modifyBaccaratHistory($request);
+        // Count who is Winner
+        $this->countGameResultService->StoreGameResult($request->get('player-card-1'), $request->get('banker-card-1'), $request->get('player-card-2'), $request->get('banker-card-2'), $request->get('player-card-3'), $request->get('banker-card-3'));
+        $WinSpot = $this->countGameResultService->getWinnerResult();
+
+        $this->baccaratRepository->modifyBaccaratHistory($request, $WinSpot);
     }
 
     /**
-     * @param $request
+     * @param GameResultCancelRequest $request
      */
-    public function cancelBaccaratHistory($request)
+    public function cancelBaccaratHistory(GameResultCancelRequest $request)
     {
         $this->baccaratRepository->cancelBaccaratHistory($request);
     }
@@ -54,7 +65,7 @@ class GameResultService
      * @param $body
      * @return string
      */
-    public function putGameModify($body)
+    public function putGameModify(array $body)
     {
         // Guzzle 設定
         $headers = [
@@ -63,7 +74,7 @@ class GameResultService
         ];
         $url = $this->gameServerHostMapping(config('app.env')).config('Api.SignalRServer.PutGameResultModify');
 
-        $responseString = "Message:";
+        $responseString = 'Message:';
 
         // 產生 GuzzleHttp Client
         $client = new Client([
@@ -87,7 +98,11 @@ class GameResultService
         return $responseString;
     }
 
-    public function putCancel($request)
+    /**
+     * @param GameResultCancelRequest $request
+     * @return string
+     */
+    public function putCancel(GameResultCancelRequest $request)
     {
         // Body 內容處理
         $body = array();
@@ -96,14 +111,17 @@ class GameResultService
         $body['Round'] = $request->get('cancel-GameRound');
         $body['Run'] = $request->get('cancel-GameRun');
         $body['ChangeType'] = $request->get('cancel-ModifiedStatus');
-        $body['ChangeResult'] = ",,,,,";
-        $body['ChangeAnnouncemet'] = "[取消公告] 百家樂" . $request->get('cancel-GameRound') . "輪" . $request->get('cancel-GameRun') . "，因結果錯誤已取消，請會員至歷史帳務查看，謝謝。";
+        $body['ChangeResult'] = ',,,,,';
+        $body['ChangeAnnouncemet'] = '[取消公告] 百家樂' . $request->get('cancel-GameRound') . '輪' . $request->get('cancel-GameRun') . '，因結果錯誤已取消，請會員至歷史帳務查看，謝謝。';
 
         return $this->putGameModify($body);
     }
 
-
-    public function putModify($request)
+    /**
+     * @param GameResultModifyRequest $request
+     * @return string
+     */
+    public function putModify(GameResultModifyRequest $request)
     {
         // Body 內容處理
         $body = array();
@@ -118,7 +136,7 @@ class GameResultService
             $request->get('banker-card-2') . ',' .
             $request->get('player-card-3') . ',' .
             $request->get('banker-card-3') . ',';
-        $body['ChangeAnnouncemet'] = "[改單公告] 百家樂" . $request->get('modify-GameRound') . "輪" . $request->get('modify-GameRun') ."局結果錯誤已重新修正，請會員至歷史帳務查看，謝謝。";
+        $body['ChangeAnnouncemet'] = '[改單公告] 百家樂' . $request->get('modify-GameRound') . '輪' . $request->get('modify-GameRun') .'局結果錯誤已重新修正，請會員至歷史帳務查看，謝謝。';
 
         return $this->putGameModify($body);
     }
