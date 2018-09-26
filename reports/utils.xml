@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="" tests="1" assertions="13" errors="0" failures="0" skipped="0" time="6.208381">
+    <testsuite name="Unit" tests="1" assertions="13" errors="0" failures="0" skipped="0" time="6.208381">
+      <testsuite name="Tests\Unit\GameResultUnitTest" file="/Users/kevin/Desktop/真人視訊/現場/casino-web-on-spot/tests/Unit/GameResultUnitTest.php" tests="1" assertions="13" errors="0" failures="0" skipped="0" time="6.208381">
+        <testcase name="it_can_search_for_gameResult" class="Tests\Unit\GameResultUnitTest" classname="Tests.Unit.GameResultUnitTest" file="/Users/kevin/Desktop/真人視訊/現場/casino-web-on-spot/tests/Unit/GameResultUnitTest.php" line="29" assertions="13" time="6.208381"/>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>

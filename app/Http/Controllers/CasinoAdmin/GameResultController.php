@@ -33,7 +33,7 @@ class GameResultController extends VoyagerBaseController
      */
     public function searchResult(Request $request)
     {
-        Voyager::canOrFail('browse_admin');
+        //Voyager::canOrFail('browse_admin');
 
         $gameReport = null;
 

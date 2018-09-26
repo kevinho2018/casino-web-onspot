@@ -52,7 +52,7 @@ class GameResultModifyController extends VoyagerBaseController
      */
     public function putCancel(GameResultCancelRequest $request)
     {
-        Voyager::canOrFail('browse_BaccaratHistory');
+        //Voyager::canOrFail('browse_BaccaratHistory');
 
         // 1. Call Game Server API to cancel remote Database
         // TODO 如果該局沒有注單會噴錯 => 先擋掉？
@@ -98,7 +98,7 @@ class GameResultModifyController extends VoyagerBaseController
      */
     public function putModify(GameResultModifyRequest $request)
     {
-        Voyager::canOrFail('browse_BaccaratHistory');
+        //Voyager::canOrFail('browse_BaccaratHistory');
 
         // 1. Call Game Server API to modify remote Database
         // TODO 如果該局沒有注單會噴錯，先擋掉？

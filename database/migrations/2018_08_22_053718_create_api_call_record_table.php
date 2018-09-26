@@ -17,6 +17,8 @@ class CreateApiCallRecordTable extends Migration
             $table->increments('RecordId');
             $table->enum('Status', ['success', 'failed']);
             $table->string('Ip', 40);
+            $table->text('RequestMethod')
+                ->comment('請求方法');
             $table->text('RequestContent')
                 ->comment('請求內容');
             $table->string('RequestUrl', 200)

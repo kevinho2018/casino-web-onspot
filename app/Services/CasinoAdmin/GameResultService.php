@@ -148,7 +148,8 @@ class GameResultService
     private function gameServerHostMapping($app_env)
     {
         $dictionary = [
-            'testing' => GAME_SERVER_HOST_TESTING,
+            'testing' => GAME_SERVER_HOST_STAGE,
+            //'testing' => GAME_SERVER_HOST_TESTING,
             'local' => GAME_SERVER_HOST_TESTING,
             'staging' => GAME_SERVER_HOST_STAGE,
             'production' => GAME_SERVER_HOST_PRODUCTION

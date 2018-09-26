@@ -30,7 +30,7 @@ class VideoController extends ApiController
 
     /**
      * @param Request $request
-     * @return \App\Http\Resources\VideoRecordCollection|\Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection|string|static[]
+     * @return array
      */
     public function getVideoFilePath(Request $request)
     {

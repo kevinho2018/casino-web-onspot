@@ -56,7 +56,7 @@ class CountGameResultService
             return 0;
         }
 
-        switch ($code{1}) {
+        switch ($code[1]) {
             case '1':
             case '2':
             case '3':
@@ -66,13 +66,15 @@ class CountGameResultService
             case '7':
             case '8':
             case '9':
-                return (int) $code{1};
+                return (int) $code[1];
             case '0':
             case 'J':
             case 'Q':
             case 'K':
                 return 0;
         }
+
+        return null;
     }
 
     /**

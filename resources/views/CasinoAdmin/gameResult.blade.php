@@ -16,7 +16,7 @@
     <div class="page-content container-fluid" id="gameResultModifyPage">
         <div class="row">
             <div class="col-md-12">
-                @if (count($errors))
+                @if (isset($errors))
                     <div class="alert alert-danger fade in">
                         <strong>訊息</strong>
                         <ul>

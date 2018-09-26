@@ -20,14 +20,13 @@
     <div class="page-content container-fluid" id="gameResultModifyPage">
         <div class="row">
             <div class="col-md-12">
-
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="nav-item active">
-                        <a class="nav-link active" href="#cancel-game" aria-controls="cancel-game" role="tab" data-toggle="tab"><font color="red"><b>取消牌局</b></font></a>
+                        <a class="nav-link active" href="#cancel-game" aria-controls="cancel-game" role="tab" data-toggle="tab"><b>取消牌局</b></a>
                     </li>
                     <li role="presentation" class="nav-item">
-                        <a class="nav-link" href="#modify-game" aria-controls="modify-game" role="tab" data-toggle="tab"><font color="orange"><b>修改牌局</b></font></a>
+                        <a class="nav-link" href="#modify-game" aria-controls="modify-game" role="tab" data-toggle="tab"><b>修改牌局</b></a>
                     </li>
                 </ul>
 
@@ -43,7 +42,7 @@
                     </div>
                 @endif
 
-                @if (count($errors))
+                @if (isset($errors))
                     <div class="alert alert-danger fade in">
                         <strong>訊息</strong>
                         <ul>
