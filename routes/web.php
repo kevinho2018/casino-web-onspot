@@ -49,6 +49,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web']], function () {
     Route::get('search-game-result', 'CasinoAdmin\GameResultController@getGameResult')
         ->name('search-game-result')
         ->middleware('admin.user');
+});
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
@@ -79,7 +80,6 @@ Route::group(['prefix' => 'admin'], function () {
         ->name('search-game-result-page')
         ->middleware('admin.user');
 });
-
 
 Route::group(['namespace' => 'Api'], function() {
    Route::get('casino/baccarat/game/history', 'BaccaratController@getHistory')->name('game-history');
