@@ -1,0 +1,38 @@
+
+
+Code Coverage Report:     
+  2018-09-12 06:21:27     
+                          
+ Summary:                 
+  Classes: 29.73% (11/37) 
+  Methods: 28.57% (26/91) 
+  Lines:   22.47% (91/405)
+
+\App\Console::App\Console\Kernel
+  Methods: 100.00% ( 2/ 2)   Lines: 100.00% (  4/  4)
+\App\Exceptions::App\Exceptions\Handler
+  Methods:  33.33% ( 1/ 3)   Lines:  24.00% (  6/ 25)
+\App\Http\Controllers\Api::App\Http\Controllers\Api\ApiController
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% ( 14/ 14)
+\App\Http\Controllers\Api::App\Http\Controllers\Api\BaccaratController
+  Methods: 100.00% ( 2/ 2)   Lines: 100.00% (  4/  4)
+\App\Http\Controllers\Api::App\Http\Controllers\Api\VideoController
+  Methods: 100.00% ( 2/ 2)   Lines: 100.00% (  4/  4)
+\App\Http\Resources::App\Http\Resources\BaccaratHistoryCollection
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  3/  3)
+\App\Providers::App\Providers\AppServiceProvider
+  Methods: 100.00% ( 2/ 2)   Lines: 100.00% (  3/  3)
+\App\Providers::App\Providers\AuthServiceProvider
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  2/  2)
+\App\Providers::App\Providers\EventServiceProvider
+  Methods: 100.00% ( 1/ 1)   Lines: 100.00% (  2/  2)
+\App\Providers::App\Providers\RouteServiceProvider
+  Methods: 100.00% ( 5/ 5)   Lines: 100.00% ( 20/ 20)
+\App\Repositories::App\Repositories\BaccaratRepository
+  Methods:  50.00% ( 2/ 4)   Lines:  21.88% (  7/ 32)
+\App\Repositories::App\Repositories\VideoRepository
+  Methods: 100.00% ( 2/ 2)   Lines: 100.00% (  7/  7)
+\App\Services\Api::App\Services\Api\BaccaratService
+  Methods: 100.00% ( 3/ 3)   Lines: 100.00% (  8/  8)
+\App\Services\Api::App\Services\Api\VideoService
+  Methods:  50.00% ( 1/ 2)   Lines:  70.00% (  7/ 10)

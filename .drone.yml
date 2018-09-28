@@ -1,0 +1,13 @@
+clone:
+  git:
+    image: plugins/git
+    depth: 50
+    tags: true
+pipeline:
+  backend:
+    image: laradock/workspace:1.8-71
+    commands:
+      - cp .env.example .env
+      - composer install --prefer-dist
+      - php artisan key:generate
+      - ./vendor/bin/phpunit

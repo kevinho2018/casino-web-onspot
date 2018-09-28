@@ -8,6 +8,7 @@
 
 namespace App\Repositories;
 
+
 use App\Models\BaccaratHistory\BaccaratHistory;
 use Carbon\Carbon;
 use App\Services\Game\CountGameResultService;
@@ -16,6 +17,7 @@ use Illuminate\Http\Request;
 /**
  * Class BaccaratRepository
  * @property CountGameResultService countGameResultService
+
  * @package App\Repositories
  */
 class BaccaratRepository
