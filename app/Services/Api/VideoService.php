@@ -9,8 +9,6 @@
 namespace App\Services\Api;
 
 use App\Repositories\VideoRepository;
-use App\Http\Resources\VideoRecordResource as VideoRecordResource;
-use App\Http\Resources\VideoRecordCollection as VideoRecordCollection;
 
 /**
  * @property VideoRepository videoRepository
@@ -28,15 +26,27 @@ class VideoService
     }
 
     /**
-     * @param $input
-     * @return VideoRecordCollection|\Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection|static[]
+     * @param array $input
+     * @return array
      */
-    public function getVideoReport($input)
+    public function getVideoReport(array $input)
     {
         $tableId = $input['tableId'];
         $round = $input['round'];
         $run = $input['run'];
 
-        return new VideoRecordCollection(VideoRecordResource::collection($this->videoRepository->getVideoReport($tableId, $round, $run)));
+        // 檢查此桌輪局是否存在
+        if ($this->videoRepository->getVideoReport($tableId, $round, $run) == null) {
+            return [
+                'status' => 'Failed',
+                'message' => 'Video not exist'
+            ];
+        }
+        $videoLink = 'http://video.livecasino168.com/' . $tableId . '/' . $round . '/' . $round .'-' . $run . ".mp4";
+
+        return [
+            "status" => "Success",
+            "videoLink" => $videoLink
+        ];
     }
 }

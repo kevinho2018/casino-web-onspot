@@ -9,13 +9,14 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Services\Api\VideoService;
 
 /**
+ * Class VideoController
  * @property VideoService videoService
+ * @package App\Http\Controllers\Api
  */
-class VideoController extends Controller
+class VideoController extends ApiController
 {
     /**
      * VideoController constructor.
@@ -29,16 +30,11 @@ class VideoController extends Controller
 
     /**
      * @param Request $request
-     * @return \App\Services\Api\BaccaratHistoryCollection|string
+     * @return array
      */
     public function getVideoFilePath(Request $request)
     {
         $input = $request->all();
-
-        if (!$request->isMethod('GET')) {
-            //throw $this->methodNotAllowedHttpException;
-            return json_encode(['Code' => 1, 'Message' => 'Method not allow.']);
-        }
 
         return $this->videoService->getVideoReport($input);
     }

@@ -36,11 +36,6 @@ class BaccaratController extends ApiController
     {
         $input = $request->all();
 
-        if (!$request->isMethod('GET')) {
-            //throw $this->methodNotAllowedHttpException;
-            return json_encode(['Code' => 1, 'Message' => 'Method not allow.']);
-        }
-
         return $this->baccaratService->getBaccaratHistoryReport($input);
     }
 }

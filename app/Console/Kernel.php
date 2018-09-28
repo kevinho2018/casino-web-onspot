@@ -26,6 +26,8 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+
+        // TODO 新增排程 檢查牌局牌型是否正確？
     }
 
     /**
