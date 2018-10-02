@@ -42,15 +42,15 @@ class GameResultService
     }
 
     /**
-     * @param $request
+     * @param GameResultModifyRequest $request
      */
     public function modifyBaccaratHistory(GameResultModifyRequest $request)
     {
         // Count who is Winner
-        $this->countGameResultService->StoreGameResult($request->get('player-card-1'), $request->get('banker-card-1'), $request->get('player-card-2'), $request->get('banker-card-2'), $request->get('player-card-3'), $request->get('banker-card-3'));
-        $WinSpot = $this->countGameResultService->getWinnerResult();
+        // $this->countGameResultService->StoreGameResult($request->get('player-card-1'), $request->get('banker-card-1'), $request->get('player-card-2'), $request->get('banker-card-2'), $request->get('player-card-3'), $request->get('banker-card-3'));
+        // $WinSpot = $this->countGameResultService->getWinnerResult();
 
-        $this->baccaratRepository->modifyBaccaratHistory($request, $WinSpot);
+        $this->baccaratRepository->modifyBaccaratHistory($request);
     }
 
     /**

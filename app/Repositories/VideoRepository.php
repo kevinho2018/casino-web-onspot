@@ -16,9 +16,9 @@ use App\Models\Video\VideoRecord;
 class VideoRepository
 {
     /**
-     * @var VideoRepository
+     * @var VideoRecord
      */
-    protected $videoRepository;
+    protected $videoRecord;
 
     /**
      * VideoRepository constructor.
@@ -33,14 +33,15 @@ class VideoRepository
      * @param $tableId
      * @param $round
      * @param $run
-     * @return \Illuminate\Database\Eloquent\Model|null|object|static
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
     public function getVideoReport($tableId, $round, $run)
     {
-        return $this->videoRecord
+        $temp = $this->videoRecord
             ->where('TableId', '=', $tableId)
             ->where('Round', '=', $round)
             ->where('Run', '=', $run)
-            ->first();
+            ->get();
+        return $temp;
     }
 }

@@ -42,7 +42,7 @@
                     </div>
                 @endif
 
-                @if (isset($errors))
+                @if (isset($errors) && count($errors) > 0)
                     <div class="alert alert-danger fade in">
                         <strong>訊息</strong>
                         <ul>
@@ -51,15 +51,15 @@
                             @endforeach
                         </ul>
                     </div>
-                @endif
+            @endif
 
-                <!-- Tab panes -->
+            <!-- Tab panes -->
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane fade in active" id="cancel-game">
                         <form method="POST" action="{{ route('cancel-game-result') }}" onsubmit="return confirm('＃提示：確定要取消牌局？(牌局取消後不可復原)')">
                             <!-- Method Field -->
-                            {{ method_field("PUT") }}
-                            <!-- CSRF TOKEN -->
+                        {{ method_field("PUT") }}
+                        <!-- CSRF TOKEN -->
                             {{ csrf_field() }}
                             <div class="panel panel-primary panel-bordered">
 
@@ -78,6 +78,8 @@
                                                 <option value="D">D</option>
                                                 <option value="E">E</option>
                                                 <option value="F">F</option>
+                                                <option value="G">G</option>
+                                                <option value="H">H</option>
                                             </select>
                                         </div>
                                         <div class="col-md-4 form-group">
@@ -141,6 +143,8 @@
                                                 <option value="D">D</option>
                                                 <option value="E">E</option>
                                                 <option value="F">F</option>
+                                                <option value="G">G</option>
+                                                <option value="H">H</option>
                                             </select>
                                         </div>
                                         <div class="col-md-4 form-group">

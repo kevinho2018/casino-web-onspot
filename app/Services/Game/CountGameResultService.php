@@ -47,10 +47,10 @@ class CountGameResultService
     }
 
     /**
-     * @param array $code
-     * @return int
+     * @param $code
+     * @return int|null
      */
-    private static function card2Point(array $code)
+    private static function card2Point($code)
     {
         if (!in_array($code, BaccaratGameRuleService::$POKER_LIST, true)) {
             return 0;

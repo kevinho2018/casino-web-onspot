@@ -16,7 +16,7 @@
     <div class="page-content container-fluid" id="gameResultModifyPage">
         <div class="row">
             <div class="col-md-12">
-                @if (isset($errors))
+                @if (isset($errors) && count($errors) > 0)
                     <div class="alert alert-danger fade in">
                         <strong>訊息</strong>
                         <ul>
@@ -26,15 +26,12 @@
                         </ul>
                     </div>
                 @endif
-
                 <!-- Tab panes -->
                 <form method="GET" action="{{ route('search-game-result') }}" onsubmit="return confirm('＃提示：確定要查詢牌局？')">
                     <div class="panel panel-primary panel-bordered">
-
                         <div class="panel-heading">
                             <h3 class="panel-title panel-icon"><i class="voyager-hammer"></i>歷史牌局 <small><font color="black">Game Result Search</font></small></h3>
                         </div>
-
                         <div class="panel-body">
                             <div class="row clearfix">
                                 <div class="col-md-4 form-group">
@@ -139,10 +136,4 @@
             </div><!-- .col-md-12 -->
         </div> <!-- .查詢結果顯示row -->
     </div><!-- .page-content -->
-@stop
-
-
-@section('page-js-script')
-    <!-- Data picker -->
-
 @stop

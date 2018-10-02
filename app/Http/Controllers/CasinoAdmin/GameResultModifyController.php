@@ -133,12 +133,14 @@ class GameResultModifyController extends VoyagerBaseController
 
         if ( !$this->isResponseSuccess($serverResponse)) {
             $this->serverApiCallRecordService->failed($prepareData, $serverResponse);
+
             return redirect('admin/baccarathistory')->withErrors([$serverResponse]);
         }
 
         // 2. Modify Local On-spot Database
         $this->gameResultService->modifyBaccaratHistory($request);
         $this->serverApiCallRecordService->success($prepareData, $serverResponse);
+
         return redirect('admin/baccarathistory')->with('Message', $serverResponse);
     }
 

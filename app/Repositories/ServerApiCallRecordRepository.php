@@ -18,6 +18,10 @@ use App\Models\ServerApiCallRecord;
 class ServerApiCallRecordRepository
 {
     /**
+     * @var ServerApiCallRecord
+     */
+    protected $serverApiCallRecord;
+    /**
      * ServerApiCallRecordRepository constructor.
      * @param ServerApiCallRecord $serverApiCallRecord
      */

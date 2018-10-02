@@ -42,6 +42,7 @@ class VideoService
                 'message' => 'Video not exist'
             ];
         }
+
         $videoLink = 'http://video.livecasino168.com/' . $tableId . '/' . $round . '/' . $round .'-' . $run . ".mp4";
 
         return [
