@@ -11,11 +11,6 @@
 |
 */
 
-/*
-Route::get('/welcome', function () {
-    return view('welcome');
-});
-*/
 Route::group(['prefix' => 'admin', 'middleware' => ['web']], function () {
     Voyager::routes();
 
@@ -24,6 +19,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web']], function () {
     // Override Voyager Login Method
     Route::get('login', ['uses' => 'VoyagerAuthController@login', 'as' => 'login']);
     Route::post('login', ['uses' => 'VoyagerAuthController@postLogin', 'as' => 'postlogin']);
+    Route::post('logout', ['uses' => 'VoyagerAuthController@logout', 'as' => 'logout']);
+
 
     // 遊戲牌局改單取消頁面 override baccaratHistory
     Route::get('baccaratHistory-page', 'CasinoAdmin\GameResultModifyController@index')

@@ -68,6 +68,13 @@ class VoyagerAuthController extends Controller
         return $this->sendFailedLoginResponse($request);
     }
 
+    public function logout()
+    {
+        Auth::logout();
+
+        return redirect()->route('login');
+    }
+
     /*
      * Preempts $redirectTo member variable (from RedirectsUsers trait)
      */
