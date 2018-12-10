@@ -37,7 +37,7 @@ class ApiController extends Controller
                 ]
             );
         }
-
+        
         $headers = ['Content-Type' => 'application/json; charset=utf-8'];
 
         return response()->json($response, 200, $headers, JSON_UNESCAPED_UNICODE);
