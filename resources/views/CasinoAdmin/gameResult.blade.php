@@ -10,6 +10,8 @@
     <link href="{{ asset('css/baccaratCard.css') }}" rel="stylesheet">
 @stop
 
+
+
 @section('content')
     @inject('gameResultPresenter', 'App\Presenters\GameResultPresenter')
 

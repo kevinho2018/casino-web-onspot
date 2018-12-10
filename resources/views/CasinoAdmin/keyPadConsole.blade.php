@@ -1,5 +1,12 @@
 @extends('voyager::master')
 
+@section('custom-js')
+    <!-- Call Web Socket Test Use -->
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="https://cdn.bootcss.com/signalr.js/2.1.1/jquery.signalR.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+@endsection
+
 @section('page_header')
     <div class="container-fluid">
         <h1 class="page-title">
@@ -10,7 +17,6 @@
     <link href="{{ asset('css/keypad.css') }}" rel="stylesheet">
     <link href="{{ asset('admin-assets/font-awesome/css/font-awesome.css') }}" rel="stylesheet">
 @stop
-
 
 @section('content')
     <div class="page-content container-fluid" id="gameResultModifyPage"><!-- page-content -->
@@ -69,11 +75,8 @@
 
 @section('page-js-script')
 <script type="text/javascript">
-
-    // TODO 確定之後怎麼跟keypad那邊即時溝通, 或是直接同步game server那邊？
-    // TODO https://github.com/alexwight/php-signalr-client/blob/master/src/Hammershark/SignalR/Client.php
-
     // 百家桌關閉維護動態觸發
+    /*
     $("a[id^='StopTable_']").on('click', function (x) {
         var callerId = this.id.substring(10, 11);
         if (confirm('是否確定暫停' + callerId + '桌?')) {
@@ -115,3 +118,23 @@
 
 </script>
 @stop
+
+@section('signalR')
+    <script>
+        $('#StartTable_G').click(function() {
+            var connection = $.hubConnection();
+            //與SignalR Hub建立連線
+            var commHub = $.connection.commHub;
+            //實做ShowMessage(msg)
+            commHub.ShowMessage = function(msg) {
+                $("body").append("<div>" + msg + "</div>");
+            };
+            //跨網域引用SignalR時，要設定hub.url, 並hub.start({ jsonp: true });
+            $.connection.hub.url = "http://stage-game-center.tw.livecasino168.com:8881/signalr";
+            $.connection.hub.start({ jsonp: true })
+                .done(function() {
+                    commHub.register("XSS");
+                });
+        });
+    </script>
+@endsection

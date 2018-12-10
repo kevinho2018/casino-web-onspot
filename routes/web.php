@@ -12,7 +12,6 @@
 */
 
 Route::group(['prefix' => 'admin'], function () {
-
     Voyager::routes();
     // Override Route
 
@@ -45,6 +44,7 @@ Route::group(['prefix' => 'admin'], function () {
     // KeyPad控制頁面
     Route::get('keypad-console-page', 'CasinoAdmin\KeypadController@keyPadConsole')
         ->name('keypad-console-page')
+
         ->middleware('admin.user');
 
     // Call Game Server 取消牌局結果
